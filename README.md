@@ -223,13 +223,14 @@ Regras:
 
 ### 8.1 A apresentação ao vivo do onboarding
 
-Na reunião, a equipe clica em **Apresentar no onboarding** no Gerador. A apresentação mostra o diagnóstico em passos e conduz 8 decisões, nesta ordem: verba, serviços para anunciar primeiro, diferenciais, convênios (ou planos e parcerias, fora da saúde), cidades, depoimentos em vídeo, vídeo de apresentação da página e pontos para confirmar. Quem conduz vê notas de como perguntar; o cliente não vê. No fim, o botão **Gerar Mapa do Onboarding** entrega o documento com o que foi decidido, que junto com a transcrição da reunião é o registro oficial.
+Na reunião, a equipe clica em **Apresentar no onboarding** no Gerador. A apresentação segue esta ordem: capa com as logos; pergunta 1, a verba; o diagnóstico; a recomendação da página principal, com o modelo da página quando houver; pergunta 2, os outros serviços além da principal; pergunta 3, as regiões, com o mapa do raio e o perfil no Google Meu Negócio; perguntas 4 a 7, diferenciais, convênios (ou planos e parcerias, fora da saúde), depoimentos em vídeo e vídeo da página; pergunta 8, confirmar os dados (nome, endereço, telefone, WhatsApp que recebe os contatos, horário e site) e os pontos em aberto. Quem conduz vê notas de como perguntar; o cliente não vê. No fim, o botão **Gerar Mapa do Onboarding** entrega o documento com o que foi decidido, que junto com a transcrição da reunião é o registro oficial.
 
 O seu bloco alimenta a apresentação. Capriche nestes campos:
 
 | Campo do bloco | Vira na apresentação |
 |---|---|
-| `cliente.servicos_foco` e `termos.frentes` | Lista de serviços sugeridos para confirmar |
+| `cliente.servicos_foco` e `termos.frentes` | O primeiro vira a página principal recomendada; os demais, os outros serviços |
+| `presenca.google` (endereço, telefone, horário, nota) | Cartão do Google Meu Negócio nas regiões e dados para confirmar |
 | `ouvimos.trunfos` | Lembretes na pergunta dos diferenciais |
 | `raio.zonas` e `raio.recomendacao_km` | Lista de cidades para marcar atuar ou não atuar |
 | `verba.frentes` | Sugestão de verba ao lado da pergunta 1 |
