@@ -231,6 +231,7 @@ O seu bloco alimenta a apresentação. Capriche nestes campos:
 |---|---|
 | `cliente.servicos_foco` e `termos.frentes` | O primeiro vira a página principal recomendada; os demais, os outros serviços |
 | `presenca.google` (endereço, telefone, horário, nota) | Cartão do Google Meu Negócio nas regiões e dados para confirmar |
+| `lp_modelo.dominios` (opcional; no Claude Code o comando preenche e confere no Registro.br) | Domínios sugeridos na recomendação da página principal; na reunião, escolhe um ou combina a aprovação no grupo |
 | `ouvimos.trunfos` | Lembretes na pergunta dos diferenciais |
 | `raio.zonas` e `raio.recomendacao_km` | Lista de cidades para marcar atuar ou não atuar |
 | `verba.frentes` | Sugestão de verba ao lado da pergunta 1 |

@@ -446,6 +446,48 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 @media (max-width: 560px) { .dk-ajuste { bottom: 74px; padding: 12px; } .dk-ajuste .acoes { width: 100%; } .dk-ajuste .dk-btn { flex: 1; } }
 .dk.com-ajuste .dk-slide { padding-bottom: 150px; }
 
+/* Domínio da página: sugestões com o resultado do Registro.br */
+.dk-dominio h3 { margin-bottom: 2px; }
+.dk-ajuda { font-size: 14px; color: var(--apagado); margin: 4px 0 12px; }
+.dk-dominio .dk-seg { flex-wrap: wrap; }
+.dk-dominio .dk-seg button { font-size: 14px; min-height: 42px; padding: 8px 14px; }
+.dk-doms { display: grid; gap: 8px; margin-top: 12px; }
+.dk-dom { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; font: inherit; text-align: left; cursor: pointer; background: #fff; border: 1.5px solid var(--linha-forte, #c9d6de); border-radius: 12px; padding: 10px 14px; transition: border-color .2s, background .2s, transform .15s; }
+.dk-dom:hover { border-color: var(--petroleo); }
+.dk-dom:active { transform: scale(.99); }
+.dk-dom .d { font-weight: 700; font-size: 15.5px; color: var(--tinta); min-width: 0; }
+.dk-dom .st { flex: none; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: #eef3f6; color: var(--apagado); }
+.dk-dom.disponivel .st { background: #e7f6ec; color: #1d7a3a; }
+.dk-dom.registrado .st { background: #f3eded; color: #8a3b3b; }
+.dk-dom.escolhido { border-color: var(--petroleo); background: #eef6fa; box-shadow: inset 4px 0 0 var(--petroleo); }
+.dk-dom.invalido .st { background: #f3eded; color: #8a3b3b; }
+@media (max-width: 560px) { .dk-dom { padding: 9px 12px; } .dk-dom .d { font-size: 14px; } }
+
+/* Datas com máscara e limite de 7 dias úteis; telefones com máscara */
+.dk-data { display: grid; gap: 4px; min-width: 0; }
+.dk-data-info p { font-size: 13.5px; margin: 2px 0 0; }
+.dk-dica { color: var(--apagado); }
+.dk-ok { color: #1d7a3a; font-weight: 600; }
+.dk-erro { color: #b42323; font-weight: 700; }
+.dk-alerta { color: #8a5a00; font-weight: 700; }
+.dk-just textarea { min-height: 64px; border-color: #e0b44a; background: #fffaf0; }
+/* Domínio: sugestivo com link para conferir */
+.dk-dom-linha { display: flex; gap: 8px; align-items: stretch; }
+.dk-dom-linha .dk-dom { flex: 1; min-width: 0; }
+.dk-dom.sugestivo .st { background: #eef3f6; color: var(--apagado); }
+.dk-conferir { flex: none; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 12px; border: 1.5px dashed var(--linha-forte, #c9d6de); color: var(--petroleo); font-size: 13.5px; font-weight: 700; text-decoration: none; }
+.dk-conferir:hover { border-color: var(--petroleo); background: #eef6fa; }
+
+@media (max-width: 560px) {
+  .dk-dom-linha { position: relative; display: block; }
+  .dk-dom { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .dk-dom .d { font-size: 14.5px; }
+  .dk-conferir { position: absolute; right: 10px; bottom: 8px; padding: 4px 10px; font-size: 12.5px; background: #fff; }
+}
+/* texto só para leitor de tela; linha com data alinha pelo topo */
+.dk .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.dk-linha:has(.dk-data) { align-items: flex-start; }
+
 </style>
 </head>
 <body>
@@ -1323,7 +1365,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     { id: 'site', tipo: 'site', titulo: 'Para onde o anúncio vai levar hoje', se: 'site',
       nota: 'Explique que o anúncio leva para uma página. Se não existe página por {servico}, diga que é isso que vamos mostrar agora: a página que a Win7 cria, focada no contato pelo WhatsApp.' },
     { id: 'pagina', tipo: 'pagina', curto: 'Página principal', titulo: 'Nossa recomendação: a página principal',
-      nota: 'Apresente a recomendação: a página principal é do {servico} com mais chance de retorno, na cidade {da_empresa}. Se houver modelo, mostre no celular da tela: vídeo, {conv_plural} e depoimentos são exemplos, e a versão publicada usa o material real {da_empresa}. Se {a_empresa} concordar, toque em "Confirmar como página principal". Pedido de mudança de layout fica para depois do material: o padrão é o que converte.' },
+      nota: 'Apresente a recomendação: a página principal é do {servico} com mais chance de retorno, na cidade {da_empresa}. Se houver modelo, mostre no celular da tela: vídeo, {conv_plural} e depoimentos são exemplos, e a versão publicada usa o material real {da_empresa}. Se {a_empresa} concordar, toque em "Confirmar como página principal". Depois, o domínio: mostre as sugestões (livre ou já registrado) e escolha uma agora, ou combine de mandar as sugestões no grupo e esperar a aprovação para colocar no ar. Pedido de mudança de layout fica para depois do material: o padrão é o que converte.' },
     { id: 'servicos', tipo: 'pergunta', numero: 2, curto: 'Outros {servicos}', titulo: 'Quais outros {servicos} entram além da página principal',
       nota: 'Diga: "Além da página principal, a verba comporta mais estes {servicos}." Se a principal não for a recomendada, toque em "Tornar principal" no {servico} certo. Marque até o número de páginas que a verba permite, contando a principal. Inclua o que surgir na conversa e exclua o que ficar de fora.' },
     { id: 'regioes', tipo: 'pergunta', numero: 3, curto: 'Regiões', titulo: 'Em quais regiões vamos anunciar', se: 'regioes',
@@ -1411,9 +1453,99 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       depoimentos: { tem: null, vai_enviar: null, vai_gravar: null, responsavel: '', prazo: '', prazo_envio: '' },
       video_home: { opcao: null, responsavel: '', prazo: '', observacao: '' },
       dados_cliente: dados,
+      dominio: { modo: null, escolhido: '', sugestoes: dominiosIniciais(diag) },
       confirmacoes: lista(diag.perguntas_reuniao).map(function (q) { return { texto: texto(q), status: null, obs: '' }; }),
       participantes: '', observacoes: ''
     };
+  }
+
+  // ---------------------------------------------------------------- datas, prazos e telefone
+  // Prazos combinados na reunião: até 7 dias úteis a partir do brainstorm; acima disso, justificativa obrigatória.
+  var PRAZO_DIAS_UTEIS = 7;
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function formatarData(d) { return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); }
+  function pascoa(a) {
+    var b = a % 19, c = Math.floor(a / 100), d = a % 100, e = Math.floor(c / 4), f = c % 4, g = Math.floor((c + 8) / 25), h = Math.floor((c - g + 1) / 3);
+    var i = (19 * b + c - e - h + 15) % 30, k = Math.floor(d / 4), l = d % 4, m = (32 + 2 * f + 2 * k - i - l) % 7, n = Math.floor((b + 11 * i + 22 * m) / 451);
+    var mes = Math.floor((i + m - 7 * n + 114) / 31), dia = ((i + m - 7 * n + 114) % 31) + 1;
+    return new Date(a, mes - 1, dia);
+  }
+  /** Feriados nacionais (fixos e móveis: Carnaval, Sexta-feira Santa, Corpus Christi). */
+  function feriados(ano) {
+    var f = {}, pa = pascoa(ano);
+    ['01-01', '04-21', '05-01', '09-07', '10-12', '11-02', '11-15', '11-20', '12-25'].forEach(function (md) { f[ano + '-' + md] = 1; });
+    [-48, -47, -2, 60].forEach(function (k) { var d = new Date(pa); d.setDate(d.getDate() + k); f[iso(d)] = 1; });
+    return f;
+  }
+  function diaUtil(d) { var w = d.getDay(); return w !== 0 && w !== 6 && !feriados(d.getFullYear())[iso(d)]; }
+  function somarDiasUteis(base, n) { var d = new Date(base.getFullYear(), base.getMonth(), base.getDate()), k = 0; while (k < n) { d.setDate(d.getDate() + 1); if (diaUtil(d)) k++; } return d; }
+  /** "dd/mm" ou "dd/mm/aaaa" vira data; sem ano, vale o ano da reunião (na virada do ano, o seguinte). Inválida: null. */
+  function lerData(t, base) {
+    var m = texto(t).match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+    if (!m) return null;
+    var dia = +m[1], mes = +m[2], ano = m[3] ? +m[3] : base.getFullYear();
+    if (m[3] && m[3].length === 2) ano += 2000;
+    var d = new Date(ano, mes - 1, dia);
+    if (d.getFullYear() !== ano || d.getMonth() !== mes - 1 || d.getDate() !== dia) return null;
+    // sem ano: só vira o ano na virada (reunião em nov ou dez, prazo em jan ou fev); fora disso, data anterior é passado
+    if (!m[3] && d < new Date(base.getFullYear(), base.getMonth(), base.getDate()) && base.getMonth() >= 10 && d.getMonth() <= 1) d.setFullYear(ano + 1);
+    return d;
+  }
+  function dataBase(r) { return lerData(texto(r && r.data_reuniao) || hojeBr(), new Date()) || new Date(); }
+  /** Confere um prazo digitado contra a data da reunião: vazio, inválido, no passado, ou além de 7 dias úteis. */
+  function checarPrazo(t, base) {
+    var limite = somarDiasUteis(base, PRAZO_DIAS_UTEIS);
+    if (!texto(t)) return { vazio: true, limite: formatarData(limite) };
+    var d = lerData(t, base);
+    if (!d) return { invalida: true, limite: formatarData(limite) };
+    var b0 = new Date(base.getFullYear(), base.getMonth(), base.getDate());
+    return { data: formatarData(d), passado: d < b0, alem: d > limite, limite: formatarData(limite) };
+  }
+  /** Máscara de telefone: (61) 99999-9999 ou (61) 3333-4444. */
+  function mascaraTelefone(t) {
+    var n = String(t || '').replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, '').slice(0, 11);
+    if (n.length <= 2) return n.length ? '(' + n : '';
+    if (n.length <= 6) return '(' + n.slice(0, 2) + ') ' + n.slice(2);
+    if (n.length <= 10) return '(' + n.slice(0, 2) + ') ' + n.slice(2, 6) + '-' + n.slice(6);
+    return '(' + n.slice(0, 2) + ') ' + n.slice(2, 7) + '-' + n.slice(7);
+  }
+  function mascaraData(t) { var n = String(t || '').replace(/\D/g, '').slice(0, 8); return n.length <= 2 ? n : n.length <= 4 ? n.slice(0, 2) + '/' + n.slice(2) : n.slice(0, 2) + '/' + n.slice(2, 4) + '/' + n.slice(4); }
+  /** Os prazos da reunião, com o passo onde se ajustam. */
+  var PRAZOS = [
+    { campo: 'depoimentos.prazo', rotulo: 'gravar os depoimentos', passo: 'depoimentos', ativo: function (r) { return (r.depoimentos || {}).vai_gravar === 'sim'; } },
+    { campo: 'depoimentos.prazo_envio', rotulo: 'enviar os depoimentos', passo: 'depoimentos', ativo: function (r) { return (r.depoimentos || {}).vai_enviar === 'sim'; } },
+    { campo: 'video_home.prazo', rotulo: 'o vídeo da página', passo: 'video', ativo: function (r) { return !!(r.video_home || {}).opcao; } }
+  ];
+  function valorCampo(r, caminho) { return caminho.split('.').reduce(function (o, k) { return o === null || o === undefined ? undefined : o[k]; }, r); }
+
+  // ---------------------------------------------------------------- domínio da página (sugestões e decisão)
+  function semAcento(t) { return texto(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, ''); }
+  var PALAVRAS_FRACAS = ['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'com', 'para'];
+  /** Normaliza o que a equipe digitar: tira http, www e barra; sem ponto, vira .com.br. Inválido devolve ''. */
+  function normalizarDominio(d) {
+    var x = texto(d).toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').replace(/\s+/g, '');
+    if (!x) return '';
+    if (x.indexOf('.') < 0) x = semAcento(x) + '.com.br';
+    if (/\.br$/.test(x) && x.split('.')[0].length > 26) return '';  // limite do Registro.br
+    return /^[a-z0-9-]{2,40}(\.[a-z0-9-]{2,20}){1,3}$/.test(x) ? x : '';
+  }
+  /** Sugestões a partir do serviço principal e da cidade (padrão das LPs Win7, como examedeimagemsorriso.com.br). Nome com até 26 caracteres (limite do Registro.br). */
+  function sugerirDominios(diag, servico) {
+    var c = (diag && diag.cliente) || {}, lm = (diag && diag.lp_modelo) || {};
+    var sv = texto(servico || lm.servico || lista(c.servicos_foco)[0]);
+    var palavras = sv.toLowerCase().split(/\s+/).filter(function (w) { return w && PALAVRAS_FRACAS.indexOf(w) < 0; }).map(semAcento).filter(Boolean);
+    var cidade = semAcento(c.cidade), uf = semAcento(c.uf);
+    if (!palavras.length || !cidade) return [];
+    var curto = palavras[0], completo = palavras.join('');
+    var bases = [curto + cidade, curto + 'em' + cidade, cidade + curto, completo + cidade, curto + cidade + uf, cidade + completo];
+    var vistos = {}, out = [];
+    bases.forEach(function (b) { if (b.length >= 6 && b.length <= 26 && !vistos[b]) { vistos[b] = 1; out.push(b + '.com.br'); } });
+    return out.slice(0, 5);
+  }
+  /** Sugestões do bloco (lp_modelo.dominios, com a conferência no Registro.br) ou geradas aqui, sem conferência. */
+  function dominiosIniciais(diag) {
+    var dados = lista(((diag && diag.lp_modelo) || {}).dominios).map(function (x) { return typeof x === 'string' ? { dominio: normalizarDominio(x), status: null } : { dominio: normalizarDominio(x.dominio), status: x.status && x.status !== 'verificar' ? x.status : null, conferido_em: x.conferido_em || '' }; }).filter(function (x) { return x.dominio; });
+    return dados.length ? dados : sugerirDominios(diag).map(function (d) { return { dominio: d, status: null }; });
   }
 
   /** Rascunho salvo numa versão anterior do roteiro: completa os campos novos sem perder as respostas. */
@@ -1448,14 +1580,19 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   }
   function pendenciasDe(r) {
     var p = [];
+    var base = dataBase(r);
+    function obsPrazo(campo) { var c = checarPrazo(valorCampo(r, campo), base); return c.alem ? 'Além de 7 dias úteis: ' + texto(valorCampo(r, campo + '_justificativa')) : ''; }
+    var dm = r.dominio || {};
+    if (dm.modo === 'escolhido' && texto(dm.escolhido)) p.push({ texto: 'Registrar o domínio ' + texto(dm.escolhido) + ' e apontar para a página', responsavel: 'Win7', prazo: '' });
+    if (dm.modo === 'whatsapp') { p.push({ texto: 'Enviar as sugestões de domínio no grupo do WhatsApp', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Aprovar um domínio no grupo para a página ir ao ar', responsavel: 'Cliente', prazo: '' }); }
     if ((r.convenios || {}).situacao === 'sim' && r.convenios.pedir_lista !== false) p.push({ texto: 'Enviar a lista completa de convênios no grupo do WhatsApp', responsavel: 'Cliente', prazo: '' });
     var dp = r.depoimentos || {};
-    if ((dp.tem === 'sim' || dp.tem === 'alguns') && dp.vai_enviar === 'sim') p.push({ texto: 'Enviar os depoimentos em vídeo no grupo do WhatsApp', responsavel: 'Cliente', prazo: texto(dp.prazo_envio) });
-    if ((dp.tem === 'nao' || dp.tem === 'alguns') && dp.vai_gravar === 'sim') p.push({ texto: 'Gravar depoimentos em vídeo', responsavel: texto(dp.responsavel) || 'Cliente', prazo: texto(dp.prazo) });
+    if ((dp.tem === 'sim' || dp.tem === 'alguns') && dp.vai_enviar === 'sim') p.push({ texto: 'Enviar os depoimentos em vídeo no grupo do WhatsApp', responsavel: 'Cliente', prazo: texto(dp.prazo_envio), obs: obsPrazo('depoimentos.prazo_envio') });
+    if ((dp.tem === 'nao' || dp.tem === 'alguns') && dp.vai_gravar === 'sim') p.push({ texto: 'Gravar depoimentos em vídeo', responsavel: texto(dp.responsavel) || 'Cliente', prazo: texto(dp.prazo), obs: obsPrazo('depoimentos.prazo') });
     if (dp.tem === 'nao' && dp.vai_gravar === 'nao') p.push({ texto: 'Página sai sem depoimentos em vídeo: rever na Etapa 2', responsavel: 'Win7', prazo: '' });
     var v = r.video_home || {};
-    if (v.opcao === 'cliente' || v.opcao === 'roteiro') { p.push({ texto: 'Enviar o roteiro do vídeo de apresentação', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Gravar o vídeo a partir do roteiro', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo) }); }
-    if (v.opcao === 'ia') { p.push({ texto: 'Enviar fotos e informações para o vídeo com IA', responsavel: 'Cliente', prazo: texto(v.prazo) }); p.push({ texto: 'Criar o roteiro e o vídeo de apresentação com IA', responsavel: 'Win7', prazo: '' }); }
+    if (v.opcao === 'cliente' || v.opcao === 'roteiro') { p.push({ texto: 'Enviar o roteiro do vídeo de apresentação', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Gravar o vídeo a partir do roteiro', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo), obs: obsPrazo('video_home.prazo') }); }
+    if (v.opcao === 'ia') { p.push({ texto: 'Enviar fotos e informações para o vídeo com IA', responsavel: 'Cliente', prazo: texto(v.prazo), obs: obsPrazo('video_home.prazo') }); p.push({ texto: 'Criar o roteiro e o vídeo de apresentação com IA', responsavel: 'Win7', prazo: '' }); }
     lista(r.dados_cliente).forEach(function (x) { if (x.status === 'corrigir') p.push({ texto: 'Corrigir ' + x.rotulo.charAt(0).toLowerCase() + x.rotulo.slice(1) + ' na página e no perfil do Google', responsavel: 'Win7', prazo: '', obs: texto(x.correcao) }); });
     lista(r.confirmacoes).forEach(function (c) { if (c.status === 'pendente') p.push({ texto: c.texto, responsavel: 'Cliente', prazo: '', obs: texto(c.obs) }); });
     return p;
@@ -1487,6 +1624,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
         },
         depoimentos: Object.assign({}, r.depoimentos),
         video_home: Object.assign({}, r.video_home),
+        dominio: { modo: (r.dominio || {}).modo || null, escolhido: texto((r.dominio || {}).escolhido), sugestoes: lista((r.dominio || {}).sugestoes).map(function (x) { return { dominio: x.dominio, status: x.status || null }; }) },
         dados_cliente: lista(r.dados_cliente).map(function (x) { return { campo: x.campo, rotulo: x.rotulo, valor: texto(x.valor), status: x.status || 'sem resposta', correcao: texto(x.correcao) }; })
       },
       lp_modelo: M.urlModelo(diag),
@@ -1507,6 +1645,10 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var vb = d.verba || {};
     if (!(vb.mensal > 0)) E('Falta a verba mensal para o Google (pergunta 1).', 'verba');
     else if (!(vb.paginas > 0)) E('A verba informada fica abaixo de ' + M.moeda(vb.minimo_por_pagina) + ' por mês: não comporta nenhuma página. Reveja a verba com o cliente.', 'verba');
+    var dm = d.dominio || {};
+    if (!dm.modo) E('Falta definir o domínio da página (recomendação da página principal).', 'pagina');
+    else if (dm.modo === 'escolhido' && !dm.escolhido) E('Falta escolher o domínio da página.', 'pagina');
+    else if (dm.modo === 'escolhido' && lista(dm.sugestoes).some(function (x) { return x.dominio === dm.escolhido && x.status === 'registrado'; })) A('O domínio ' + dm.escolhido + ' já está registrado: confirme que é ' + v.da_empresa + ' antes de usar.', 'pagina');
     if (!lista(d.servicos).length) E('Nenhum ' + v.servico + ' confirmado para anunciar (pergunta 2).', 'servicos');
     else if (vb.paginas > 0 && d.servicos.length > vb.paginas) A(d.servicos.length + ' ' + v.servicos + ' confirmados para ' + pl(vb.paginas, 'página', 'páginas') + ': os excedentes começam na próxima etapa, ou a verba precisa subir.', 'servicos');
     var cd = d.cidades || {};
@@ -1522,6 +1664,16 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     }
     if (!d.video_home || !d.video_home.opcao) E('Falta definir o vídeo de apresentação da página (pergunta 7).', 'video');
     if (!lista(d.diferenciais).length) A('Nenhum diferencial registrado (pergunta 4): os anúncios ficam genéricos.', 'diferenciais');
+    var base = lerData(texto(m && m.cliente && m.cliente.data_reuniao), new Date()) || new Date(), resp = { depoimentos: d.depoimentos || {}, video_home: d.video_home || {} };
+    PRAZOS.forEach(function (pz) {
+      if (!pz.ativo(resp)) return;
+      var c = checarPrazo(valorCampo(resp, pz.campo), base);
+      if (c.invalida) E('Data inválida no prazo para ' + pz.rotulo + ': use dd/mm.', pz.passo);
+      else if (c.passado) E('O prazo para ' + pz.rotulo + ' (' + c.data + ') já passou.', pz.passo);
+      else if (c.alem && !texto(valorCampo(resp, pz.campo + '_justificativa'))) E('Prazo para ' + pz.rotulo + ' além de 7 dias úteis (limite ' + c.limite + ') sem justificativa.', pz.passo);
+    });
+    var wa = lista(d.dados_cliente).filter(function (x) { return x.campo === 'whatsapp' && x.valor; })[0];
+    if (wa && String(wa.valor).replace(/\D/g, '').length !== 11) A('O WhatsApp que recebe os contatos está incompleto: use DDD e os 9 dígitos.', 'confirmacoes');
     var rec = texto(d.pagina_principal_recomendada);
     if (lista(d.servicos).length && rec && lista(d.servicos).indexOf(rec) < 0) A('A página principal (' + rec + ') não está marcada para anunciar: a principal passa a ser ' + d.pagina_principal + '.', 'servicos');
     var dc = lista(d.dados_cliente), semConf = dc.filter(function (x) { return x.status === 'sem resposta'; }).length;
@@ -1554,6 +1706,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var cards = [
       card('Verba mensal no Google', moeda(vb.mensal), (vb.paginas === 1 ? '1 página e campanha' : vb.paginas + ' páginas e campanhas') + ' · cerca de ' + moeda(vb.por_pagina_dia) + ' por dia em cada'),
       card('Página principal', esc(principal || 'a definir'), m.lp_modelo ? '<a href="' + esc(m.lp_modelo) + '" target="_blank" rel="noopener">Ver o modelo da página</a>' : ''),
+      card('Domínio da página', esc(d.dominio && d.dominio.modo === 'escolhido' ? d.dominio.escolhido : d.dominio && d.dominio.modo === 'whatsapp' ? 'Aprovação no grupo' : 'a definir'), d.dominio && d.dominio.modo === 'whatsapp' ? esc('Sugestões: ' + lista(d.dominio.sugestoes).map(function (x) { return x.dominio; }).join(' · ')) : ''),
       card(vocab.Servicos + ' para anunciar', String(d.servicos.length), esc(d.servicos.join(' · '))),
       card('Convênios', esc(simNao[d.convenios.situacao] || 'sem resposta'), d.convenios.pedir_lista ? 'Lista completa será pedida no grupo do WhatsApp' : esc(d.convenios.observacao)),
       card('Depoimentos em vídeo', esc(simNao[d.depoimentos.tem] || 'sem resposta'), esc([d.depoimentos.vai_enviar === 'sim' ? 'Vai enviar no grupo' + (texto(d.depoimentos.prazo_envio) ? ' até ' + d.depoimentos.prazo_envio : '') : '', d.depoimentos.vai_gravar === 'sim' ? 'Vai gravar' + (texto(d.depoimentos.prazo) ? ' até ' + d.depoimentos.prazo : '') : (d.depoimentos.vai_gravar === 'nao' ? 'Não vai gravar agora' : '')].filter(Boolean).join(' · '))),
@@ -1593,7 +1746,8 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 
   raiz.OnboardingW7 = {
     ROTEIRO: ROTEIRO, MAPA_SCHEMA: MAPA_SCHEMA, MAPA_VERSAO: MAPA_VERSAO, RESPOSTAS_SCHEMA: RESPOSTAS_SCHEMA,
-    slidesPara: slidesPara, estadoInicial: estadoInicial, migrar: migrar, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
+    slidesPara: slidesPara, estadoInicial: estadoInicial, migrar: migrar, sugerirDominios: sugerirDominios, normalizarDominio: normalizarDominio,
+    PRAZO_DIAS_UTEIS: PRAZO_DIAS_UTEIS, somarDiasUteis: somarDiasUteis, lerData: lerData, checarPrazo: checarPrazo, dataBase: dataBase, formatarData: formatarData, mascaraTelefone: mascaraTelefone, mascaraData: mascaraData, PRAZOS: PRAZOS, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
     montarMapa: montarMapa, validarMapa: validarMapa, gerarMapaHtml: gerarMapaHtml, pendenciasDe: pendenciasDe, txt: txt
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
@@ -1616,6 +1770,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var partes = caminho.split('.'), o = st.r;
     for (var i = 0; i < partes.length - 1; i++) { if (o[partes[i]] === null || typeof o[partes[i]] !== 'object') o[partes[i]] = {}; o = o[partes[i]]; }
     o[partes[partes.length - 1]] = valor;
+    if (!st.r.data_reuniao) st.r.data_reuniao = new Date().toLocaleDateString('pt-BR');
     salvar();
   }
   function hora() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
@@ -1640,6 +1795,19 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     return '<div class="dk-seg" role="group">' + opcoes.map(function (o) { return '<button type="button" data-campo="' + campo + '" data-valor="' + o[0] + '" aria-pressed="' + (atual === o[0]) + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>';
   }
   function entrada(campo, rotulo, valor, dica) { return '<label class="dk-campo">' + esc(rotulo) + '<input type="text" data-campo="' + campo + '" value="' + esc(valor === null || valor === undefined ? '' : valor) + '"' + (dica ? ' placeholder="' + esc(dica) + '"' : '') + ' autocomplete="off"></label>'; }
+  /** Data com máscara dd/mm, conferida contra a reunião: inválida, passada, ou além de 7 dias úteis (pede justificativa). */
+  function entradaData(campo, rotulo) {
+    return '<div class="dk-data" data-wrap="' + campo + '"><label class="dk-campo">' + esc(rotulo) + '<input type="text" inputmode="numeric" data-campo="' + campo + '" data-mascara="data" value="' + esc(obter(campo) || '') + '" placeholder="dd/mm" maxlength="10" autocomplete="off"></label><div class="dk-data-info">' + infoData(campo) + '</div></div>';
+  }
+  function infoData(campo) {
+    var v = String(obter(campo) || ''), c = O.checarPrazo(v, O.dataBase(st.r));
+    if (v.length < 5) return '<p class="dk-dica">Até 7 dias úteis: ' + c.limite + '.</p>';
+    if (c.invalida) return '<p class="dk-erro">Data inválida. Use dd/mm.</p>';
+    if (c.passado) return '<p class="dk-erro">' + c.data + ' já passou.</p>';
+    if (c.alem) return '<p class="dk-alerta">Além de 7 dias úteis (limite ' + c.limite + '). Escreva o motivo:</p><label class="dk-campo dk-just"><span class="sr">Justificativa do prazo</span><textarea rows="2" data-campo="' + campo + '_justificativa" placeholder="Por que o prazo maior">' + esc(obter(campo + '_justificativa') || '') + '</textarea></label>';
+    return '<p class="dk-ok">' + c.data + ', dentro dos 7 dias úteis.</p>';
+  }
+  function entradaTel(campo, rotulo, valor) { return '<label class="dk-campo">' + esc(rotulo) + '<input type="tel" inputmode="tel" data-campo="' + campo + '" data-mascara="tel" value="' + esc(valor || '') + '" placeholder="(DDD) 99999-9999" maxlength="15" autocomplete="off"></label>'; }
   function marcar(campo, rotulo, valor) { return '<label class="dk-check' + (valor ? ' marcado' : '') + '"><input type="checkbox" data-campo="' + campo + '"' + (valor ? ' checked' : '') + '>' + esc(rotulo) + '</label>'; }
   function cabec(s) { return '<div class="dk-rot">' + (s.numero ? '<span class="num">Pergunta ' + s.numero + '</span>' : '') + esc(rotuloTipo(s)) + '</div><h2>' + esc(s.titulo) + '</h2>'; }
   function rotuloTipo(s) { return ({ capa: '', agenda: 'Roteiro', ouvimos: 'Diagnóstico', placar: 'Diagnóstico', busca: 'Diagnóstico', site: 'Diagnóstico', pagina: 'Recomendação', gmn: 'Diagnóstico', pergunta: 'Decisão', fim: 'Fechamento' })[s.tipo] || ''; }
@@ -1707,6 +1875,22 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     return cabec(s) + (site.url ? '<p class="dk-lead">' + esc(site.url) + '</p>' : '') + '<div class="dk-grade"><div class="dk-cartao"><h3>Oportunidades</h3>' + listaItens(o.op, 'op') + '</div><div class="dk-cartao"><h3>O que já funciona</h3>' + listaItens(o.ok, 'ok') + '</div></div>';
   };
   function iPrincipal() { var i = -1; st.r.servicos.some(function (x, k) { if (x.principal) { i = k; return true; } return false; }); return i < 0 ? 0 : i; }
+  /** Domínio da página: escolher uma sugestão agora, ou mandar as sugestões no grupo e esperar a aprovação. */
+  function cartaoDominio() {
+    var dm = st.r.dominio || { modo: null, escolhido: '', sugestoes: [] };
+    var rot = { disponivel: 'livre', registrado: 'já registrado', invalido: 'inválido' };
+    var lista_ = (dm.sugestoes || []).map(function (x) {
+      var esc_ = dm.modo === 'escolhido' && dm.escolhido === x.dominio, verif = !!rot[x.status];
+      return '<div class="dk-dom-linha"><button type="button" class="dk-dom' + (esc_ ? ' escolhido' : '') + (verif ? ' ' + x.status : ' sugestivo') + '" data-acao="escolher-dominio" data-d="' + esc(x.dominio) + '" aria-pressed="' + esc_ + '"><span class="d">' + esc(x.dominio).replace(/\./g, '<wbr>.') + '</span><span class="st">' + (verif ? esc(rot[x.status]) : 'sugestivo') + '</span></button>' +
+        (verif ? '' : '<a class="dk-conferir" href="https://registro.br/busca-dominio/?fqdn=' + encodeURIComponent(x.dominio) + '" target="_blank" rel="noopener" title="Abre a busca do Registro.br">Conferir</a>') + '</div>';
+    }).join('');
+    return '<div class="dk-cartao dk-sec dk-dominio"><h3>Domínio da página</h3><p class="dk-ajuda">Sugestões para os anúncios e as campanhas. Escolha uma agora ou combine de sugerir no grupo do WhatsApp.</p>' +
+      seg('dominio.modo', [['escolhido', 'Escolher agora'], ['whatsapp', 'Sugerir no WhatsApp']], dm.modo) +
+      (lista_ ? '<div class="dk-doms">' + lista_ + '</div>' : '') +
+      (function () { var conf = (dm.sugestoes || []).filter(function (x) { return rot[x.status] && x.conferido_em; })[0]; return conf ? '<p class="dk-dica">Livre ou registrado: conferido no Registro.br em ' + esc(conf.conferido_em.split('-').reverse().join('/')) + '. Sugestivo: ainda não conferido.</p>' : '<p class="dk-dica">Sugestivo: ainda não conferido no Registro.br. Use "Conferir" antes de decidir.</p>'; })() +
+      '<div class="dk-linha"><label class="dk-campo">Outro domínio<input type="text" id="dk-novo-dominio" placeholder="ex.: ' + esc(((dm.sugestoes || [])[0] || {}).dominio || 'nomedaclinica.com.br') + '" autocomplete="off" spellcheck="false"></label><button type="button" class="dk-btn" data-acao="add-dominio">Incluir</button></div>' +
+      (dm.modo === 'whatsapp' ? '<p class="dk-ajuda">A Win7 manda estas sugestões no grupo; a página vai ao ar quando ' + vocab().a_empresa + ' aprovar uma.</p>' : '') + '</div>';
+  }
   R.pagina = function (s) {
     var u = M.urlModelo(st.diag), v = vocab(), c = st.diag.cliente || {}, ip = iPrincipal(), sv = st.r.servicos[ip] || { nome: v.servico, confirmado: false };
     var conv = v.setor === 'saude' ? 'convênios' : 'parceiros';
@@ -1714,6 +1898,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var esquerda = '<p class="dk-lead">Recomendamos começar pela página de <strong>' + esc(sv.nome) + ' em ' + esc(c.cidade || '') + '</strong>' + (frente && frente.motivo ? ': ' + md(frente.motivo) : '.') + '</p>' +
       '<div class="dk-cartao"><h3>O que a página já traz</h3><ul class="dk-lista"><li>Logo, ' + v.servico + ' e cidade no título, igual à busca do ' + v.cliente_final + '</li><li>WhatsApp no topo, no botão e na barra fixa</li><li>Lugar do vídeo, dos ' + conv + ' e dos depoimentos</li></ul></div>' +
       '<div class="dk-cartao dk-sec"><h3>O que vem ' + v.da_empresa + '</h3><ul class="dk-lista op"><li>Vídeo de apresentação (ou roteiro, ou IA)</li><li>Lista de ' + (v.setor === 'saude' ? 'convênios' : 'parceiros e formas de pagamento') + '</li><li>Depoimentos em vídeo</li></ul></div>' +
+      cartaoDominio() +
       '<div class="dk-gerado"><button type="button" class="dk-btn' + (sv.confirmado ? '' : ' primario') + ' dk-grande" data-acao="confirmar-principal" aria-pressed="' + !!sv.confirmado + '">' + (sv.confirmado ? 'Página principal confirmada' : 'Confirmar como página principal') + '</button>' +
       (u ? '<a class="dk-btn dk-grande" href="' + esc(u) + '" target="_blank" rel="noopener">Abrir o modelo em tela cheia</a>' : '') + '</div>';
     var direita = u ? '<div class="dk-celular"><iframe src="' + esc(u) + '" title="Modelo da página de ' + esc(sv.nome) + '" loading="lazy"></iframe></div><p class="dk-legenda">Modelo para aprovação: vídeo, ' + conv + ' e depoimentos são exemplos.</p>' : '';
@@ -1830,22 +2015,22 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     return cabec(s) + '<div class="dk-grade"><div class="dk-cartao"><h3>Por que importa</h3><ul class="dk-lista ok"><li>Mostra pessoas reais falando de ' + v.a_empresa + '.</li><li>Dá confiança para quem chega pelo anúncio e ainda não conhece vocês.</li><li>Por isso aumenta a conversão da página: mais contatos com a mesma verba.</li></ul>' +
       (saude ? '<p style="margin-top:10px;font-size:14px;color:var(--apagado)">Em saúde: sem promessa de resultado e sem antes e depois.</p>' : '') + '</div>' +
       '<div class="dk-cartao"><h3>Vocês já têm depoimentos em vídeo?</h3>' + seg('depoimentos.tem', [['sim', 'Sim'], ['alguns', 'Alguns'], ['nao', 'Não']], d.tem) +
-      (d.tem === 'sim' || d.tem === 'alguns' ? '<div class="dk-sec"><h3>Vão enviar os vídeos?</h3>' + seg('depoimentos.vai_enviar', [['sim', 'Vão enviar no grupo'], ['nao', 'Ainda não']], d.vai_enviar) + (d.vai_enviar === 'sim' ? '<div class="dk-linha">' + entrada('depoimentos.prazo_envio', 'Até quando', d.prazo_envio, 'ex.: 20/10') + '</div>' : '') + '</div>' : '') +
-      (d.tem === 'nao' || d.tem === 'alguns' ? '<div class="dk-sec"><h3>Vão gravar?</h3>' + seg('depoimentos.vai_gravar', [['sim', 'Vão gravar'], ['nao', 'Agora não']], d.vai_gravar) + (d.vai_gravar === 'sim' ? '<div class="dk-linha">' + entrada('depoimentos.responsavel', 'Quem cuida', d.responsavel, 'nome') + entrada('depoimentos.prazo', 'Até quando', d.prazo, 'ex.: 30/10') + '</div><p style="margin-top:10px;font-size:14px;color:var(--texto)">Dica: vídeo curto, no celular em pé, a pessoa diz o nome e o que gostou.</p>' : '') + '</div>' : '') + '</div></div>';
+      (d.tem === 'sim' || d.tem === 'alguns' ? '<div class="dk-sec"><h3>Vão enviar os vídeos?</h3>' + seg('depoimentos.vai_enviar', [['sim', 'Vão enviar no grupo'], ['nao', 'Ainda não']], d.vai_enviar) + (d.vai_enviar === 'sim' ? '<div class="dk-linha">' + entradaData('depoimentos.prazo_envio', 'Até quando') + '</div>' : '') + '</div>' : '') +
+      (d.tem === 'nao' || d.tem === 'alguns' ? '<div class="dk-sec"><h3>Vão gravar?</h3>' + seg('depoimentos.vai_gravar', [['sim', 'Vão gravar'], ['nao', 'Agora não']], d.vai_gravar) + (d.vai_gravar === 'sim' ? '<div class="dk-linha">' + entrada('depoimentos.responsavel', 'Quem cuida', d.responsavel, 'nome') + entradaData('depoimentos.prazo', 'Até quando') + '</div><p style="margin-top:10px;font-size:14px;color:var(--texto)">Dica: vídeo curto, no celular em pé, a pessoa diz o nome e o que gostou.</p>' : '') + '</div>' : '') + '</div></div>';
   };
   R.video = function (s) {
     var vh = st.r.video_home, v = vocab();
     var ops = [['cliente', v.a_empresa.charAt(0).toUpperCase() + v.a_empresa.slice(1) + ' grava', 'A Win7 envia o roteiro e ' + v.a_empresa + ' grava um vídeo curto mostrando a estrutura e a equipe.'], ['ia', 'Win7 cria com IA', 'A Win7 cria o roteiro e um agente de IA monta o vídeo a partir de fotos e informações.']];
     return cabec(s) + '<p class="dk-lead">O vídeo fica no topo da página: é a primeira coisa que o ' + v.cliente_final + ' vê ao chegar pelo anúncio. O roteiro é sempre da Win7.</p><div class="dk-opcoes">' +
       ops.map(function (o) { return '<button type="button" class="dk-opcao" data-campo="video_home.opcao" data-valor="' + o[0] + '" aria-pressed="' + (vh.opcao === o[0]) + '"><b>' + esc(o[1]) + '</b><span>' + esc(o[2]) + '</span></button>'; }).join('') + '</div>' +
-      (vh.opcao ? '<div class="dk-linha">' + entrada('video_home.responsavel', 'Quem cuida', vh.responsavel, 'nome') + entrada('video_home.prazo', 'Até quando', vh.prazo, 'ex.: 30/10') + '</div><div class="dk-sec">' + entrada('video_home.observacao', 'Observação', vh.observacao, '') + '</div>' : '');
+      (vh.opcao ? '<div class="dk-linha">' + entrada('video_home.responsavel', 'Quem cuida', vh.responsavel, 'nome') + entradaData('video_home.prazo', 'Até quando') + '</div><div class="dk-sec">' + entrada('video_home.observacao', 'Observação', vh.observacao, '') + '</div>' : '');
   };
   R.confirmacoes = function (s) {
     var c = st.r.confirmacoes, v = vocab(), dc = st.r.dados_cliente || [];
     var dados = dc.length ? '<div class="dk-cartao"><h3>Dados ' + v.da_empresa + ' na página e no Google</h3>' + dc.map(function (x, i) {
-      return '<div class="dk-dado"><div><div class="rot">' + esc(x.rotulo) + '</div>' + (x.editavel ? entrada('dados_cliente.' + i + '.valor', '', x.valor, 'preencher') : '<div class="val">' + esc(x.valor || 'não informado') + '</div>') + '</div>' +
+      return '<div class="dk-dado"><div><div class="rot">' + esc(x.rotulo) + '</div>' + (x.editavel ? (/telefone|whatsapp/.test(x.campo) ? entradaTel('dados_cliente.' + i + '.valor', '', x.valor) : entrada('dados_cliente.' + i + '.valor', '', x.valor, 'preencher')) : '<div class="val">' + esc(x.valor || 'não informado') + '</div>') + '</div>' +
         seg('dados_cliente.' + i + '.status', [['ok', 'Confirmado'], ['corrigir', 'Corrigir']], x.status) +
-        (x.status === 'corrigir' ? '<div class="corr">' + entrada('dados_cliente.' + i + '.correcao', 'Como fica', x.correcao, '') + '</div>' : '') + '</div>';
+        (x.status === 'corrigir' ? '<div class="corr">' + (/telefone|whatsapp/.test(x.campo) ? entradaTel('dados_cliente.' + i + '.correcao', 'Como fica', x.correcao) : entrada('dados_cliente.' + i + '.correcao', 'Como fica', x.correcao, '')) + '</div>' : '') + '</div>';
     }).join('') + '</div>' : '';
     return cabec(s) + dados + (c.length ? '<div class="dk-zona-rot">Pontos em aberto do diagnóstico</div>' +  '<div class="pilha" style="display:grid;gap:12px">' + c.map(function (x, i) {
       return '<div class="dk-cartao"><p style="font-weight:700;color:var(--tinta);margin-bottom:8px">' + esc(x.texto) + '</p>' + seg('confirmacoes.' + i + '.status', [['ok', 'Confirmado'], ['pendente', 'Pendente']], x.status) + '<div class="dk-sec" style="margin-top:10px">' + entrada('confirmacoes.' + i + '.obs', 'Anotação', x.obs, '') + '</div></div>';
@@ -1857,7 +2042,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var simNao = { sim: 'Sim', nao: 'Não', na: 'Não se aplica', alguns: 'Alguns' };
     var cards = [
       ['Verba mensal', d.verba.mensal ? moeda(d.verba.mensal) : 'falta', d.verba.paginas ? d.verba.paginas + (d.verba.paginas > 1 ? ' páginas' : ' página') : ''],
-      ['Página principal', d.pagina_principal || 'falta', ''],
+      ['Página principal', d.pagina_principal || 'falta', d.dominio && d.dominio.modo === 'escolhido' ? d.dominio.escolhido : d.dominio && d.dominio.modo === 'whatsapp' ? 'domínio: aprovação no grupo' : 'domínio a definir'],
       [v.Servicos, String(d.servicos.length), d.servicos.join(' · ')],
       ['Cidades', d.cidades.atuar.length + ' para atuar', d.cidades.nao_atuar.length ? d.cidades.nao_atuar.length + ' fora' : ''],
       ['Diferenciais', String(d.diferenciais.length), d.diferenciais.map(function (x) { return x.rotulo; }).join(' · ')],
@@ -1999,6 +2184,14 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       if (era && era.principal && st.r.servicos.length) st.r.servicos[0].principal = true;
       salvar(); desenhar(true); toast((era ? era.nome : 'O item') + ' saiu da lista.');
     }
+    else if (acao === 'escolher-dominio') { st.r.dominio = st.r.dominio || { sugestoes: [] }; var dd = a.dataset.d; var ja = st.r.dominio.modo === 'escolhido' && st.r.dominio.escolhido === dd; st.r.dominio.modo = ja ? null : 'escolhido'; st.r.dominio.escolhido = ja ? '' : dd; salvar(); desenhar(true); }
+    else if (acao === 'add-dominio') {
+      var ent = st.el.querySelector('#dk-novo-dominio'), nd = O.normalizarDominio(ent.value);
+      if (!nd) { toast('Domínio inválido. Ex.: nomedaclinica.com.br'); return; }
+      st.r.dominio = st.r.dominio || { modo: null, escolhido: '', sugestoes: [] };
+      if (!st.r.dominio.sugestoes.some(function (x) { return x.dominio === nd; })) st.r.dominio.sugestoes.push({ dominio: nd, status: null, incluido: true });
+      st.r.dominio.modo = 'escolhido'; st.r.dominio.escolhido = nd; salvar(); desenhar(true);
+    }
     else if (acao === 'comecar-ajuste') { st.ajuste = true; proximoPonto(); }
     else if (acao === 'proximo-ponto') proximoPonto();
     else if (acao === 'voltar-resumo') { st.ajuste = false; ir(st.slides.length - 1); }
@@ -2016,12 +2209,19 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   }
   function aoDigitar(e) {
     var t = e.target; if (!t.dataset || !t.dataset.campo || t.type === 'checkbox') return;
+    if (t.dataset.mascara === 'tel') t.value = O.mascaraTelefone(t.value);
+    if (t.dataset.mascara === 'data') t.value = O.mascaraData(t.value);
     definir(t.dataset.campo, t.value);
+    if (t.dataset.mascara === 'data') { var w = t.closest('[data-wrap]'); if (w) w.querySelector('.dk-data-info').innerHTML = infoData(t.dataset.campo); }
     if (st.ajuste) painelAjuste();
     var calc = st.el.querySelector('#dk-calc'); if (calc) { calc.innerHTML = calcVerbaHtml(); if (MOVIMENTO) { calc.classList.remove('pulsa'); void calc.offsetWidth; calc.classList.add('pulsa'); } }
   }
   function aoMudar(e) {
     var t = e.target;
+    if (t.dataset && t.dataset.mascara === 'data' && t.value.length === 5) {
+      var cc = O.checarPrazo(t.value, O.dataBase(st.r));
+      if (cc.data) { t.value = cc.data; definir(t.dataset.campo, t.value); var w2 = t.closest('[data-wrap]'); if (w2) w2.querySelector('.dk-data-info').innerHTML = infoData(t.dataset.campo); }
+    }
     if (t.type === 'checkbox' && t.dataset.campo) { definir(t.dataset.campo, t.checked); desenhar(true); return; }
     if (t.dataset && t.dataset.acao === 'importar' && t.files[0]) {
       var leitor = new FileReader();
