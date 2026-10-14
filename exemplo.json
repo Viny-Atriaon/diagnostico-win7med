@@ -1,43 +1,72 @@
 {
-  "versao_dados": "2",
-  "meta": { "gerado_por": "Agente de Diagnóstico Win7 Med", "aviso": "EXEMPLO FICTÍCIO para demonstrar o Gerador. Clínica, pessoas e números são inventados; distâncias aproximadas." },
+  "versao_dados": "3",
+  "meta": {
+    "gerado_por": "Agente de Diagnóstico Win7 Med",
+    "aviso": "EXEMPLO FICTÍCIO para demonstrar o Gerador. Clínica, pessoas e números são inventados; distâncias aproximadas."
+  },
   "cliente": {
     "nome": "Clínica Vértice Imagem",
     "nome_curto": "a Vértice",
     "cidade": "Rio Verde",
     "uf": "GO",
     "segmento": "Diagnóstico por imagem",
-    "servicos_foco": ["Ressonância magnética", "Tomografia", "Ultrassonografia"],
-    "decisor": "Dra. Helena Prado",
+    "servicos_foco": [
+      "Ressonância magnética",
+      "Tomografia",
+      "Ultrassonografia"
+    ],
     "data_reuniao": "21/10/2026",
-    "links": { "google": "https://maps.google.com/?cid=exemplo", "site": "https://verticeimagem.exemplo.com.br", "instagram": "https://instagram.com/verticeimagem.exemplo", "facebook": "https://facebook.com/verticeimagem.exemplo" }
+    "links": {
+      "google": "https://maps.google.com/?cid=exemplo",
+      "site": "https://verticeimagem.exemplo.com.br",
+      "instagram": "https://instagram.com/verticeimagem.exemplo",
+      "facebook": "https://facebook.com/verticeimagem.exemplo"
+    }
   },
-  "subtitulo": "Exemplo fictício. Como os pacientes de Rio Verde encontram a clínica hoje, e o caminho até a agenda.",
-  "restricoes": { "cores_vetadas": [], "nao_prometer": ["prazo de laudo menor que 48 horas"] },
+  "subtitulo": "Exemplo fictício. Como a clínica aparece hoje para quem busca o exame em Rio Verde, e o plano para os anúncios.",
+  "restricoes": {
+    "cores_vetadas": [],
+    "nao_prometer": [
+      "prazo de laudo menor que 48 horas"
+    ]
+  },
   "impressao": {
-    "titulo": "A clínica existe no Google, mas perde o paciente na hora da escolha",
-    "frase": "A Vértice tem boa nota e estrutura, mas **não aparece quando o paciente busca o exame**: quem anuncia leva o pedido médico que sai do consultório.",
+    "titulo": "A clínica existe no Google, mas perde o paciente para quem anuncia",
+    "frase": "A Vértice tem boa nota e estrutura, mas **não aparece no patrocinado** quando o paciente busca o exame, e o site não tem página para receber o anúncio.",
     "achados_principais": [
       "Nenhum anúncio para ressonância em Rio Verde, enquanto **dois concorrentes anunciam**.",
-      "Site sem página por exame e sem WhatsApp em um clique: o paciente desiste no celular.",
+      "Uma página só para todos os exames: o anúncio de ressonância não tem para onde levar o paciente.",
       "Nota 4,2 com avaliações negativas sem resposta: a conta das avaliações mostra o caminho até 4,5."
     ],
     "ganhos_rapidos": [
-      "Responder as 9 avaliações negativas sem resposta.",
-      "Cadastrar ressonância, tomografia e ultrassom como serviços no perfil.",
-      "Colocar o link do WhatsApp na bio do Instagram e no perfil do Google."
+      "Criar a página de ressonância antes de ligar a campanha.",
+      "Instalar o Gerenciador de Tags para medir cada contato.",
+      "Responder as 9 avaliações negativas sem resposta."
     ]
   },
   "ouvimos": {
     "titulo": "O que ouvimos na conversa com a clínica",
     "intro": "Registro da conversa do comercial com a clínica. Se algo estiver incompleto, ajustamos juntos.",
     "dores": [
-      { "titulo": "Ressonância com horários vazios à tarde", "texto": "A máquina foi trocada há um ano e [[a agenda da tarde fica com buracos]] quase todos os dias.", "citacao": "A gente investiu na máquina e o paciente não sabe que ela existe." },
-      { "titulo": "Paciente acha que só tem exame em Goiânia", "texto": "Parte dos pedidos de ressonância da região [[viaja para a capital]] por não conhecer a opção local." },
-      { "titulo": "Marketing sem número", "texto": "Já pagaram postagem no Instagram por meses e [[ninguém mostrou quantos exames vieram]] disso." }
+      {
+        "titulo": "Ressonância com horários vazios à tarde",
+        "texto": "A máquina foi trocada há um ano e [[a agenda da tarde fica com buracos]] quase todos os dias.",
+        "citacao": "A gente investiu na máquina e o paciente não sabe que ela existe."
+      },
+      {
+        "titulo": "Paciente acha que só tem exame em Goiânia",
+        "texto": "Parte dos pedidos de ressonância da região [[viaja para a capital]] por não conhecer a opção local."
+      },
+      {
+        "titulo": "Marketing sem número",
+        "texto": "Já pagaram postagem no Instagram por meses e [[ninguém mostrou quantos exames vieram]] disso."
+      }
     ],
     "trunfos": [
-      { "titulo": "Equipamento novo e laudo assinado por especialista", "texto": "Ressonância de alto campo instalada em 2025 e laudos por radiologistas com título de especialista: argumento forte que hoje não aparece em lugar nenhum." }
+      {
+        "titulo": "Equipamento novo e laudo assinado por especialista",
+        "texto": "Ressonância de alto campo instalada em 2025 e laudos por radiologistas com título de especialista: argumento forte que hoje não aparece em lugar nenhum."
+      }
     ],
     "fonte": "conversa do comercial com a clínica em 14/10/2026 (informado). Exemplo fictício."
   },
@@ -46,8 +75,16 @@
       "nome": "Clínica Vértice Imagem",
       "categoria": "Centro de diagnóstico por imagem",
       "url": "https://maps.google.com/?cid=exemplo",
-      "nota": { "valor": 4.2, "fonte": "perfil público do Google (exemplo)", "status": "observado" },
-      "avaliacoes": { "valor": 187, "fonte": "perfil público do Google (exemplo)", "status": "observado" },
+      "nota": {
+        "valor": 4.2,
+        "fonte": "perfil público do Google (exemplo)",
+        "status": "observado"
+      },
+      "avaliacoes": {
+        "valor": 187,
+        "fonte": "perfil público do Google (exemplo)",
+        "status": "observado"
+      },
       "endereco": "Setor Central, Rio Verde/GO (exemplo)",
       "horario": "Seg. a sex. 7h às 19h · sáb. 7h às 12h",
       "telefone": "(64) 0000-0000",
@@ -58,15 +95,30 @@
         "reivindicado": "sim",
         "categoria_correta": "sim",
         "horario_completo": "sim",
-        "contato_no_perfil": { "valor": "parcial", "evidencia": "Tem telefone, mas o link leva para a página inicial do site, não para o WhatsApp." },
-        "fotos_reais": { "valor": "parcial", "evidencia": "Fachada antiga; nenhuma foto da ressonância nova." },
+        "contato_no_perfil": {
+          "valor": "parcial",
+          "evidencia": "Tem telefone, mas o link leva para a página inicial do site, não para o WhatsApp."
+        },
+        "fotos_reais": {
+          "valor": "parcial",
+          "evidencia": "Fachada antiga; nenhuma foto da ressonância nova."
+        },
         "servicos_cadastrados": "nao",
-        "responde_avaliacoes": { "valor": "nao", "evidencia": "9 avaliações negativas sem resposta." },
+        "responde_avaliacoes": {
+          "valor": "nao",
+          "evidencia": "9 avaliações negativas sem resposta."
+        },
         "posts_recentes": "nao"
       },
       "achados": [
-        { "texto": "A nota cai com avaliações negativas sem resposta: a resposta pública é o que o próximo paciente lê.", "tipo": "alerta" },
-        { "texto": "Horário de sábado bem informado: diferencial para quem trabalha durante a semana.", "tipo": "ok" }
+        {
+          "texto": "A nota cai com avaliações negativas sem resposta: a resposta pública é o que o próximo paciente lê.",
+          "tipo": "alerta"
+        },
+        {
+          "texto": "Horário de sábado bem informado: diferencial para quem trabalha durante a semana.",
+          "tipo": "ok"
+        }
       ]
     },
     "busca": {
@@ -77,21 +129,87 @@
           "termo": "ressonância magnética rio verde",
           "observado_em": "15/10/2026",
           "resultados": [
-            { "tipo": "patrocinado", "dominio": "concorrente-a.exemplo", "nome": "Concorrente A", "titulo": "Ressonância em Rio Verde | Agende Hoje", "descricao": "Convênios e particular. Resultado online." },
-            { "tipo": "patrocinado", "dominio": "agregador.exemplo", "nome": "Agregador de exames", "titulo": "Exames com desconto em Rio Verde", "descricao": "Compare preços de clínicas." },
-            { "tipo": "mapa", "dominio": "Google Maps", "nome": "3 perfis locais", "titulo": "Vértice aparece em 2º no mapa", "descricao": "Atrás do Concorrente A." },
-            { "ausente": true, "tipo": "patrocinado", "dominio": "verticeimagem.exemplo.com.br", "nome": "Vértice", "marca": "A Vértice não anuncia", "titulo": "Espaço vazio no patrocinado", "descricao": "Quem busca o exame vê primeiro quem anuncia." }
+            {
+              "tipo": "patrocinado",
+              "dominio": "concorrente-a.exemplo",
+              "nome": "Concorrente A",
+              "titulo": "Ressonância em Rio Verde | Agende Hoje",
+              "descricao": "Convênios e particular. Resultado online."
+            },
+            {
+              "tipo": "patrocinado",
+              "dominio": "agregador.exemplo",
+              "nome": "Agregador de exames",
+              "titulo": "Exames com desconto em Rio Verde",
+              "descricao": "Compare preços de clínicas."
+            },
+            {
+              "tipo": "mapa",
+              "dominio": "Google Maps",
+              "nome": "3 perfis locais",
+              "titulo": "Vértice aparece em 2º no mapa",
+              "descricao": "Atrás do Concorrente A."
+            },
+            {
+              "ausente": true,
+              "tipo": "patrocinado",
+              "dominio": "verticeimagem.exemplo.com.br",
+              "nome": "Vértice",
+              "marca": "A Vértice não anuncia",
+              "titulo": "Espaço vazio no patrocinado",
+              "descricao": "Quem busca o exame vê primeiro quem anuncia."
+            }
+          ]
+        },
+        {
+          "termo": "clínica vértice imagem",
+          "observado_em": "15/10/2026",
+          "resultados": [
+            {
+              "tipo": "patrocinado",
+              "dominio": "concorrente-a.exemplo",
+              "nome": "Concorrente A",
+              "titulo": "Exames de Imagem em Rio Verde | Agende Hoje",
+              "descricao": "Anúncio do concorrente aparece quando buscam o nome da Vértice."
+            },
+            {
+              "tipo": "organico",
+              "dominio": "verticeimagem.exemplo.com.br",
+              "nome": "Vértice",
+              "cliente": true,
+              "titulo": "Clínica Vértice Imagem",
+              "descricao": "Site e perfil aparecem logo abaixo do anúncio."
+            }
           ]
         }
       ],
       "criterios": {
-        "aparece_mapa": { "valor": "sim", "evidencia": "2º lugar no mapa." },
-        "aparece_organico": { "valor": "parcial", "evidencia": "Só na 2ª página para o exame; aparece bem para o nome." },
+        "aparece_mapa": {
+          "valor": "sim",
+          "evidencia": "2º lugar no mapa."
+        },
+        "aparece_organico": {
+          "valor": "parcial",
+          "evidencia": "Só na 2ª página para o exame; aparece bem para o nome."
+        },
         "anuncia_exame_foco": "nao",
         "a_frente_dos_concorrentes": "nao",
-        "busca_pelo_nome": "sim"
+        "busca_pelo_nome": "sim",
+        "marca_protegida": {
+          "valor": "nao",
+          "evidencia": "O Concorrente A anuncia na busca pelo nome da Vértice."
+        }
       },
-      "achados": [ { "texto": "Dois anunciantes ocupam o topo antes do mapa: o paciente decide antes de ver a Vértice.", "tipo": "alerta" } ]
+      "achados": [
+        {
+          "texto": "Dois anunciantes ocupam o topo antes do mapa: o paciente decide antes de ver a Vértice.",
+          "tipo": "alerta"
+        },
+        {
+          "texto": "Quem busca o nome da Vértice vê primeiro o anúncio de um concorrente.",
+          "tipo": "alerta"
+        }
+      ]
     },
     "site": {
       "url": "https://verticeimagem.exemplo.com.br",
@@ -101,45 +219,84 @@
       "criterios": {
         "existe": "sim",
         "https": "sim",
-        "celular": { "valor": "parcial", "evidencia": "Abre, mas o menu cobre o texto e os botões são pequenos." },
+        "celular": {
+          "valor": "parcial",
+          "evidencia": "Abre, mas o menu cobre o texto e os botões são pequenos."
+        },
         "rapido": "nd",
         "pagina_por_exame": "nao",
-        "whatsapp_um_clique": "nao",
-        "convenios_visiveis": { "valor": "parcial", "evidencia": "Lista em PDF para baixar." },
+        "convenios_visiveis": {
+          "valor": "parcial",
+          "evidencia": "Lista em PDF para baixar."
+        },
         "endereco_como_chegar": "sim",
-        "rt_visivel": "nao"
+        "rt_visivel": "nao",
+        "contato_whatsapp": {
+          "valor": "nao",
+          "evidencia": "Só formulário de contato por e-mail."
+        },
+        "politica_privacidade": "nao",
+        "tag_google": {
+          "valor": "nao",
+          "evidencia": "Nenhuma tag do Google no código da página."
+        }
       },
-      "achados": [ { "texto": "Uma página só para todos os exames: o anúncio de ressonância não teria para onde levar o paciente.", "tipo": "alerta" } ]
-    },
-    "instagram": {
-      "url": "https://instagram.com/verticeimagem.exemplo",
-      "observado_em": "15/10/2026",
-      "origem": "observado",
-      "seguidores": { "valor": 4200, "fonte": "perfil público (exemplo)", "status": "observado" },
-      "criterios": {
-        "existe": "sim",
-        "bio_completa": { "valor": "parcial", "evidencia": "Tem cidade e exames, mas o link é da página inicial." },
-        "frequencia_semanal": "sim",
-        "conteudo_de_decisao": { "valor": "nao", "evidencia": "Posts de datas comemorativas; nada sobre convênio, preparo ou prazo." },
-        "destaques_uteis": "nao",
-        "prova_social": "parcial"
-      },
-      "achados": [ { "texto": "O esforço está no topo do funil; a decisão do paciente com pedido na mão acontece no Google.", "tipo": "" } ]
-    },
-    "facebook": {
-      "url": "https://facebook.com/verticeimagem.exemplo",
-      "observado_em": "15/10/2026",
-      "origem": "observado",
-      "criterios": { "existe": "sim", "dados_corretos": { "valor": "nao", "evidencia": "Telefone antigo." }, "ativo_90_dias": "nao", "avaliacoes_respondidas": "nd" }
+      "achados": [
+        {
+          "texto": "Uma página só para todos os exames: o anúncio de ressonância não teria para onde levar o paciente.",
+          "tipo": "alerta"
+        },
+        {
+          "texto": "Sem tag do Google, a campanha não mede quantos contatos cada termo gera.",
+          "tipo": "alerta"
+        }
+      ]
     }
   },
   "fontes_extras": [
-    { "fonte": "Conversa comercial", "detalhe": "Relato do comercial e transcrição", "status": "informado", "data": "14/10/2026", "como": "Dores e capacidade ociosa ditas pela clínica." }
+    {
+      "fonte": "Conversa comercial",
+      "detalhe": "Relato do comercial e transcrição",
+      "status": "informado",
+      "data": "14/10/2026",
+      "como": "Dores, diferenciais e capacidade ociosa ditas pela clínica."
+    },
+    {
+      "fonte": "Instagram (contexto)",
+      "detalhe": "instagram.com/verticeimagem.exemplo",
+      "status": "observado",
+      "data": "15/10/2026",
+      "como": "Usado só para conferir diferenciais e convênios; não entra no placar."
+    }
   ],
   "agenda": {
     "itens": [
-      { "nome": "Ressonância", "horarios_vazios": { "valor": 120, "fonte": "agenda de setembro informada pela clínica", "status": "informado" }, "ticket": { "valor": 650, "fonte": "ticket médio informado na conversa", "status": "informado" } },
-      { "nome": "Tomografia", "horarios_vazios": { "valor": 80, "fonte": "estimativa da clínica", "status": "estimado" }, "ticket": { "valor": 420, "fonte": "ticket médio informado na conversa", "status": "informado" } }
+      {
+        "nome": "Ressonância",
+        "horarios_vazios": {
+          "valor": 120,
+          "fonte": "agenda de setembro informada pela clínica",
+          "status": "informado"
+        },
+        "ticket": {
+          "valor": 650,
+          "fonte": "ticket médio informado na conversa",
+          "status": "informado"
+        }
+      },
+      {
+        "nome": "Tomografia",
+        "horarios_vazios": {
+          "valor": 80,
+          "fonte": "estimativa da clínica",
+          "status": "estimado"
+        },
+        "ticket": {
+          "valor": 420,
+          "fonte": "ticket médio informado na conversa",
+          "status": "informado"
+        }
+      }
     ],
     "leitura": "Ninguém precisa recuperar tudo: preencher **1 em cada 4 horários vazios** já paga o plano com folga."
   },
@@ -149,9 +306,62 @@
     "recomendacao_km": 40,
     "recomendacao_texto": "Raio para começar a Etapa 1: Rio Verde e as cidades vizinhas que já mandam pacientes.",
     "zonas": [
-      { "nome": "Zona 1 · Base", "km_ate": 40, "estrategia": "Defender a cidade sede e encher os horários vazios da tarde.", "cidades": [ { "nome": "Rio Verde", "uf": "GO", "km": 0 }, { "nome": "Santa Helena de Goiás", "uf": "GO", "km": 35 } ] },
-      { "nome": "Zona 2 · Crescimento", "km_ate": 80, "estrategia": "Cidades sem ressonância própria: vence quem aparece primeiro com vaga e convênio.", "cidades": [ { "nome": "Montividiu", "uf": "GO", "km": 50 }, { "nome": "Maurilândia", "uf": "GO", "km": 70 }, { "nome": "Acreúna", "uf": "GO", "km": 78 } ] },
-      { "nome": "Zona 3 · Oportunidade", "km_ate": 130, "estrategia": "Entrada seletiva pelo equipamento novo e pela agenda rápida, na Etapa 3.", "cidades": [ { "nome": "Jataí", "uf": "GO", "km": 95 }, { "nome": "Paraúna", "uf": "GO", "km": 105 } ] }
+      {
+        "nome": "Zona 1 · Base",
+        "km_ate": 40,
+        "estrategia": "Defender a cidade sede e encher os horários vazios da tarde.",
+        "cidades": [
+          {
+            "nome": "Rio Verde",
+            "uf": "GO",
+            "km": 0
+          },
+          {
+            "nome": "Santa Helena de Goiás",
+            "uf": "GO",
+            "km": 35
+          }
+        ]
+      },
+      {
+        "nome": "Zona 2 · Crescimento",
+        "km_ate": 80,
+        "estrategia": "Cidades sem ressonância própria: vence quem aparece primeiro com vaga e convênio.",
+        "cidades": [
+          {
+            "nome": "Montividiu",
+            "uf": "GO",
+            "km": 50
+          },
+          {
+            "nome": "Maurilândia",
+            "uf": "GO",
+            "km": 70
+          },
+          {
+            "nome": "Acreúna",
+            "uf": "GO",
+            "km": 78
+          }
+        ]
+      },
+      {
+        "nome": "Zona 3 · Oportunidade",
+        "km_ate": 130,
+        "estrategia": "Entrada seletiva pelo equipamento novo e pela agenda rápida, na Etapa 3.",
+        "cidades": [
+          {
+            "nome": "Jataí",
+            "uf": "GO",
+            "km": 95
+          },
+          {
+            "nome": "Paraúna",
+            "uf": "GO",
+            "km": 105
+          }
+        ]
+      }
     ],
     "fonte": "Distâncias por estrada aproximadas (exemplo), a confirmar no planejamento da campanha."
   },
@@ -162,40 +372,157 @@
       {
         "frente": "Ressonância magnética",
         "grupos": [
-          { "intencao": "Exame + cidade", "termos": [
-            { "termo": "ressonância magnética rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" },
-            { "termo": "ressonância rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" },
-            { "termo": "clínica de ressonância em rio verde", "correspondencias": ["frase"], "prioridade": "media" }
-          ] },
-          { "intencao": "Preço", "termos": [
-            { "termo": "ressonância magnética preço rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" },
-            { "termo": "quanto custa ressonância magnética", "correspondencias": ["frase"], "prioridade": "media" }
-          ] },
-          { "intencao": "Convênio", "termos": [
-            { "termo": "ressonância unimed rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" },
-            { "termo": "ressonância ipasgo", "correspondencias": ["frase"], "prioridade": "media" }
-          ] },
-          { "intencao": "Região do exame", "termos": [
-            { "termo": "ressonância de joelho rio verde", "correspondencias": ["frase"], "prioridade": "media" },
-            { "termo": "ressonância de coluna rio verde", "correspondencias": ["frase"], "prioridade": "media" }
-          ] },
-          { "intencao": "Cidades vizinhas", "termos": [
-            { "termo": "ressonância magnética santa helena de goiás", "correspondencias": ["frase"], "prioridade": "media" },
-            { "termo": "ressonância magnética jataí", "correspondencias": ["frase"], "prioridade": "baixa" }
-          ] }
+          {
+            "intencao": "Exame + cidade",
+            "termos": [
+              {
+                "termo": "ressonância magnética rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              },
+              {
+                "termo": "ressonância rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              },
+              {
+                "termo": "clínica de ressonância em rio verde",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              }
+            ]
+          },
+          {
+            "intencao": "Preço",
+            "termos": [
+              {
+                "termo": "ressonância magnética preço rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              },
+              {
+                "termo": "quanto custa ressonância magnética",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              }
+            ]
+          },
+          {
+            "intencao": "Convênio",
+            "termos": [
+              {
+                "termo": "ressonância unimed rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              },
+              {
+                "termo": "ressonância ipasgo",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              }
+            ]
+          },
+          {
+            "intencao": "Região do exame",
+            "termos": [
+              {
+                "termo": "ressonância de joelho rio verde",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              },
+              {
+                "termo": "ressonância de coluna rio verde",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              }
+            ]
+          },
+          {
+            "intencao": "Cidades vizinhas",
+            "termos": [
+              {
+                "termo": "ressonância magnética santa helena de goiás",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              },
+              {
+                "termo": "ressonância magnética jataí",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "baixa"
+              }
+            ]
+          }
         ]
       },
       {
         "frente": "Tomografia",
         "grupos": [
-          { "intencao": "Exame + cidade", "termos": [
-            { "termo": "tomografia rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" },
-            { "termo": "tomografia computadorizada rio verde", "correspondencias": ["exata", "frase"], "prioridade": "alta" }
-          ] },
-          { "intencao": "Urgência", "termos": [
-            { "termo": "tomografia hoje rio verde", "correspondencias": ["frase"], "prioridade": "media" },
-            { "termo": "tomografia perto de mim", "correspondencias": ["frase"], "prioridade": "media" }
-          ] }
+          {
+            "intencao": "Exame + cidade",
+            "termos": [
+              {
+                "termo": "tomografia rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              },
+              {
+                "termo": "tomografia computadorizada rio verde",
+                "correspondencias": [
+                  "exata",
+                  "frase"
+                ],
+                "prioridade": "alta"
+              }
+            ]
+          },
+          {
+            "intencao": "Urgência",
+            "termos": [
+              {
+                "termo": "tomografia hoje rio verde",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              },
+              {
+                "termo": "tomografia perto de mim",
+                "correspondencias": [
+                  "frase"
+                ],
+                "prioridade": "media"
+              }
+            ]
+          }
         ]
       }
     ]
@@ -203,44 +530,163 @@
   "conduta": {
     "titulo": "O plano para cada achado",
     "itens": [
-      { "responde": "Busca no Google", "titulo": "Google Ads por exame, no fundo do funil", "texto": "Campanhas separadas para ressonância e tomografia, com os termos acima e o raio da Etapa 1. Cada anúncio leva à **página do exame**, não à página inicial." },
-      { "responde": "Site", "titulo": "Uma página por exame, com WhatsApp em um clique", "texto": "Página de ressonância e página de tomografia no padrão Win7: vídeo, convênios, depoimentos e botão de WhatsApp sempre visível." },
-      { "responde": "Google Meu Negócio", "titulo": "Perfil do Google pronto para converter", "texto": "Responder as avaliações, cadastrar os exames, fotos reais da ressonância nova e link direto para o WhatsApp." },
-      { "responde": "Instagram e Facebook", "titulo": "Redes como prova, não como vitrine", "texto": "Destaques com convênios, preparo e como agendar; o link da bio vai para o WhatsApp." },
-      { "responde": "Marketing sem número", "titulo": "Painel com cada real e cada paciente", "texto": "Contatos por canal, custo por contato e cruzamento com o faturamento, em tempo real.", "painel": true }
+      {
+        "responde": "Busca no Google",
+        "titulo": "Campanhas de pesquisa por exame",
+        "texto": "Uma campanha para ressonância e outra para tomografia, com os termos acima, só exata e frase, e o raio da Etapa 1."
+      },
+      {
+        "responde": "Concorrente no nome da clínica",
+        "titulo": "Proteger a marca",
+        "texto": "Campanha de marca barata para a Vértice aparecer primeiro quando buscam o nome dela."
+      },
+      {
+        "responde": "Site sem página por exame",
+        "titulo": "Página de destino por exame no padrão Win7",
+        "texto": "Ressonância na raiz do domínio e tomografia em subcaminho, com o termo do anúncio no título, convênios e WhatsApp sempre visível."
+      },
+      {
+        "responde": "Sem medição",
+        "titulo": "Medir cada contato",
+        "texto": "Gerenciador de Tags e conversão de contato pelo WhatsApp e pelo telefone antes de ligar a verba."
+      },
+      {
+        "responde": "Google Meu Negócio",
+        "titulo": "Perfil pronto para a extensão de local",
+        "texto": "Exames cadastrados, fotos da ressonância nova e respostas às avaliações: a nota aparece junto do anúncio."
+      }
     ]
   },
   "etapas": [
-    { "nome": "Etapa 1 · Calibração", "foco": "dados reais", "acoes": ["Páginas por exame e campanhas no ar", "Raio de 40 km", "Reunião semanal de acompanhamento"], "meta": "custo por contato medido e primeiros horários da tarde preenchidos" },
-    { "nome": "Etapa 2 · Otimização", "foco": "eficiência", "acoes": ["Refino de termos e horários", "Programa de avaliações rodando", "Atendimento medido: contato para exame"], "meta": "custo por exame em queda e nota acima de 4,5" },
-    { "nome": "Etapa 3 · Expansão", "foco": "escala", "acoes": ["Abrir a Zona 2 e a Zona 3", "Verba para o exame com mais horário vazio", "Novas frentes conforme a capacidade"], "meta": "agenda da tarde de ressonância cheia" }
+    {
+      "nome": "Etapa 1 · Calibração",
+      "foco": "dados reais",
+      "acoes": [
+        "Página de ressonância e tag instaladas",
+        "Campanhas de ressonância e de marca no raio de 40 km",
+        "Termos só em exata e frase"
+      ],
+      "meta": "custo por contato medido e primeiros horários da tarde preenchidos"
+    },
+    {
+      "nome": "Etapa 2 · Otimização",
+      "foco": "eficiência",
+      "acoes": [
+        "Negativar termos que não viram exame",
+        "Abrir a campanha de tomografia",
+        "Ajustar horários e lances"
+      ],
+      "meta": "custo por exame em queda"
+    },
+    {
+      "nome": "Etapa 3 · Expansão",
+      "foco": "escala",
+      "acoes": [
+        "Abrir a Zona 2 e a Zona 3",
+        "Verba para o exame com mais horário vazio"
+      ],
+      "meta": "agenda da tarde de ressonância cheia"
+    }
   ],
   "projecao": {
-    "verba": { "valor": 3000, "fonte": "verba sugerida para 2 frentes (exemplo)", "status": "estimado" },
-    "ticket": { "valor": 650, "fonte": "ticket médio informado", "status": "informado" },
+    "verba": {
+      "valor": 3000,
+      "fonte": "verba sugerida total (exemplo)",
+      "status": "informado"
+    },
+    "ticket": {
+      "valor": 650,
+      "fonte": "ticket médio informado",
+      "status": "informado"
+    },
     "cenarios": [
-      { "nome": "Conservador", "custo_contato": { "valor": 10, "fonte": "referência da base Win7 Med", "status": "estimado" }, "conversao": { "valor": 0.15, "fonte": "referência da base Win7 Med", "status": "estimado" } },
-      { "nome": "Realista", "custo_contato": { "valor": 8, "fonte": "referência da base Win7 Med", "status": "estimado" }, "conversao": { "valor": 0.2, "fonte": "referência da base Win7 Med", "status": "estimado" } },
-      { "nome": "Otimista", "custo_contato": { "valor": 6, "fonte": "referência da base Win7 Med", "status": "estimado" }, "conversao": { "valor": 0.25, "fonte": "referência da base Win7 Med", "status": "estimado" } }
+      {
+        "nome": "Conservador",
+        "custo_contato": {
+          "valor": 10,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        },
+        "conversao": {
+          "valor": 0.15,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        }
+      },
+      {
+        "nome": "Realista",
+        "custo_contato": {
+          "valor": 8,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        },
+        "conversao": {
+          "valor": 0.2,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        }
+      },
+      {
+        "nome": "Otimista",
+        "custo_contato": {
+          "valor": 6,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        },
+        "conversao": {
+          "valor": 0.25,
+          "fonte": "referência da base Win7 Med",
+          "status": "estimado"
+        }
+      }
     ],
     "nota": "Os números reais aparecem no painel a partir da Etapa 1."
   },
-  "prova": { "usar_case_padrao": true },
-  "investimento": {
-    "titulo": "Formas de começar, escalando por frente de exame",
-    "frentes": ["Ressonância", "Tomografia", "Ultrassonografia"],
-    "base": { "nome": "Plano mensal Win7 Med (exemplo)", "valor": 4500 },
-    "verba_por_frente": 1500,
-    "validade_dias": 15,
-    "planos": [
-      { "nome": "Começo focado", "desc": "Ressonância primeiro: o exame com mais horário vazio e maior ticket.", "frentes_ativas": [true, false, false] },
-      { "nome": "Imagem completa", "desc": "Ressonância e tomografia em paralelo.", "frentes_ativas": [true, true, false], "recomendado": true },
-      { "nome": "Cobertura total", "desc": "As três frentes ativas, com ultrassom puxando volume.", "frentes_ativas": [true, true, true] }
+  "pendencias": [
+    "Confirmar distâncias por estrada das cidades da Zona 2 e 3"
+  ],
+  "verba": {
+    "titulo": "Verba sugerida para os anúncios",
+    "intro": "Ponto de partida por campanha. A verba cresce por etapa, conforme os dados.",
+    "frentes": [
+      {
+        "frente": "Ressonância magnética",
+        "motivo": "Maior ticket e mais horário vazio.",
+        "valor": {
+          "valor": 1500,
+          "fonte": "sugestão da equipe (exemplo)",
+          "status": "informado"
+        }
+      },
+      {
+        "frente": "Tomografia",
+        "motivo": "Entra na Etapa 2.",
+        "valor": {
+          "valor": 1200,
+          "fonte": "sugestão da equipe (exemplo)",
+          "status": "informado"
+        }
+      },
+      {
+        "frente": "Marca",
+        "motivo": "Proteger o nome da clínica.",
+        "valor": {
+          "valor": 300,
+          "fonte": "sugestão da equipe (exemplo)",
+          "status": "informado"
+        }
+      }
     ]
   },
-  "fechamento": {
-    "pergunta": "Dra. Helena, vamos encher a agenda da tarde a partir da próxima etapa?",
-    "texto": "A demanda existe e o equipamento já está pago. Com as campanhas no ar, cada real fica medido no painel."
-  },
-  "pendencias": ["Confirmar distâncias por estrada das cidades da Zona 2 e 3", "Confirmar a lista completa de convênios"]
+  "perguntas_reuniao": [
+    "A clínica já tem conta do Google Ads? Quem é o administrador?",
+    "Qual convênio traz mais pacientes de ressonância?",
+    "Qual o horário de corte para encaixe no mesmo dia?",
+    "Quem recebe e responde os contatos do WhatsApp?",
+    "Confirmar a lista completa de convênios aceitos."
+  ],
+  "conclusao": {
+    "titulo": "A demanda existe e o equipamento já está pago. Falta a Vértice aparecer primeiro.",
+    "texto": "Na reunião de onboarding confirmamos os pontos acima e começamos a Etapa 1."
+  }
 }
