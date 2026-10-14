@@ -408,3 +408,5 @@ node motor1-diagnostico/scripts/gerar.mjs clientes/<slug>/diagnostico.json
 ```
 
 O diagnóstico sai na mesma pasta. Para a apresentação ao vivo, abra o Gerador e cole o bloco.
+
+**Fluxo completo no chat do Claude Code:** `node motor1-diagnostico/scripts/cliente.mjs clientes/<slug>/diagnostico.json --publicar` gera o diagnóstico, o arquivo do onboarding já aberto com o cliente e a landing page modelo da Win7 (logo, serviço principal na cidade, vídeo base, convênios e depoimentos ilustrativos), publicada em um endereço próprio fora do Google.
