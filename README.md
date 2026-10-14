@@ -423,6 +423,7 @@ O diagnóstico sai na mesma pasta. Para a apresentação ao vivo, abra o Gerador
 |---|---|
 | `README.md` e `AGENTE-DIAGNOSTICO-WIN7MED.md` | O agente. Cole o link do repositório numa conversa com a IA, ou envie o arquivo |
 | `index.html` | O Gerador do diagnóstico, publicado em https://viny-atriaon.github.io/diagnostico-win7med/ |
+| `robo3.html` | O comando inicial do robô 3 (execução depois da reunião), em https://viny-atriaon.github.io/diagnostico-win7med/robo3.html |
 | `agente.md` | Cópia do agente servida junto com o Gerador |
 | `exemplo.json` | Exemplo fictício de bloco de dados |
 
