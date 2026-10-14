@@ -108,7 +108,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 /* Apresentação do onboarding · tela cheia sobre o Gerador. Prefixo dk- para não colidir com o Gerador.
    Conceito: palco claro e grande para TV e tela compartilhada; a barra de baixo conduz; as notas de quem conduz
    ficam num painel escuro que só abre quando pedido (tecla N). Mesmo vocabulário visual do diagnóstico. */
-.dk { position: fixed; inset: 0; z-index: 100; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; background: var(--fundo, #eef3f6); color: var(--tinta, #0e1a22); font-family: var(--fonte); }
+.dk { position: fixed; inset: 0; z-index: 100; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto minmax(0, 1fr) auto; background: var(--fundo, #eef3f6); color: var(--tinta, #0e1a22); font-family: var(--fonte); }
 .dk[hidden] { display: none !important; }
 .dk-faixa { display: flex; height: 5px; } .dk-faixa span { flex: 1; }
 .dk-faixa .a { background: var(--w7-amarelo); } .dk-faixa .v { background: var(--w7-vermelho); } .dk-faixa .g { background: var(--w7-verde); } .dk-faixa .b { background: var(--w7-azul); }
@@ -363,7 +363,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   .dk-slide.anima :is(.dk-grade, .dk-cards, .dk-trilha) > :nth-child(5), .dk-slide.anima :is(.dk-dif, .dk-dado, .dk-opcao):nth-child(5) { animation-delay: .53s; }
   .dk-slide.anima :is(.dk-grade, .dk-cards, .dk-trilha) > :nth-child(n+6), .dk-slide.anima :is(.dk-dif, .dk-dado):nth-child(n+6) { animation-delay: .6s; }
   .dk-slide.anima .dk-capa .logos { animation: dkLogo .8s cubic-bezier(.2,.7,.2,1) both; }
-  .dk-slide.anima .dk-ecg path:last-child { stroke-dasharray: 1400; animation: dkTraco 1.6s .35s cubic-bezier(.6,0,.2,1) both; }
+  .dk-slide.anima .dk-ecg .base { stroke-dasharray: 1400; animation: dkTraco 1.6s .35s cubic-bezier(.6,0,.2,1) both; }
   .dk-slide.anima .dk-gauge .arco { animation: dkArco 1.2s .3s cubic-bezier(.2,.7,.2,1) both; }
   .dk-slide.anima .dk-pilar .e { transform-origin: left center; animation: dkBarra .9s cubic-bezier(.2,.7,.2,1) both; }
   .dk-slide.anima .dk-pilar:nth-child(1) .e { animation-delay: .45s; } .dk-slide.anima .dk-pilar:nth-child(2) .e { animation-delay: .6s; } .dk-slide.anima .dk-pilar:nth-child(3) .e { animation-delay: .75s; }
@@ -393,6 +393,58 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 @media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
   .dk-slide.anima > *, .dk-slide.anima.volta > * { animation-name: dkSobe; }
 }
+
+/* Batimento contínuo: faixa em todos os slides e traço da capa (a análise da Win7 Med acontecendo) */
+.dk-pulso { display: flex; align-items: center; gap: 10px; padding: 4px 18px; background: var(--cartao, #fff); border-bottom: 1px solid var(--linha, #dbe5ea); height: 30px; }
+.dk-pulso .bate { width: 17px; height: 16px; flex: none; fill: var(--w7-vermelho); }
+.dk-pulso { min-width: 0; overflow: hidden; }
+.dk-pulso .traco { flex: 1 1 0; width: 0; height: 22px; min-width: 0; }
+.dk-pulso .traco path, .dk-ecg .base, .dk-ecg .luz { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.dk-pulso .base { stroke: rgba(30, 136, 184, .28); stroke-width: 1.6; }
+.dk-pulso .luz { stroke: var(--petroleo-claro, #1e88b8); stroke-width: 2.2; stroke-dasharray: 70 1000; stroke-dashoffset: 70; }
+.dk-ecg .luz { stroke: var(--w7-amarelo, #f5b71a); stroke-width: 3.4; stroke-dasharray: 60 1000; stroke-dashoffset: 60; opacity: .9; }
+.dk-ecg .coracao { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .dk-pulso .bate, .dk-ecg .coracao { transform-box: fill-box; transform-origin: center; animation: dkBate 1.2s ease-in-out infinite; }
+  .dk-pulso .luz { animation: dkMonitor 3.2s linear infinite; filter: drop-shadow(0 0 3px rgba(30, 136, 184, .7)); }
+  .dk-ecg .luz { animation: dkMonitor 2.6s linear infinite; filter: drop-shadow(0 0 4px rgba(245, 183, 26, .8)); }
+  @keyframes dkBate { 0%, 100% { transform: scale(1); } 12% { transform: scale(1.28); } 24% { transform: scale(1); } 36% { transform: scale(1.16); } 52% { transform: scale(1); } }
+  @keyframes dkMonitor { from { stroke-dashoffset: 70; } to { stroke-dashoffset: -1000; } }
+}
+@media (prefers-reduced-motion: reduce) { .dk-pulso .luz, .dk-ecg .luz { display: none; } }
+
+/* Serviços: escolher a principal, incluir e excluir */
+.dk-servs { display: grid; gap: 10px; margin-top: 6px; }
+.dk-serv { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; align-items: center; background: #fff; border: 1.5px solid var(--linha, #dbe5ea); border-radius: 14px; padding: 10px 12px 10px 16px; transition: border-color .2s, box-shadow .2s; }
+.dk-serv.marcado { border-color: var(--petroleo); }
+.dk-serv.principal { border-color: var(--petroleo); box-shadow: inset 4px 0 0 var(--w7-amarelo); }
+.dk-serv .nome { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 16.5px; color: var(--tinta); cursor: pointer; min-width: 0; }
+.dk-serv .nome input { width: 22px; height: 22px; accent-color: var(--petroleo); flex: none; }
+.dk-serv .nome small { font-weight: 500; font-size: 12.5px; color: var(--apagado); }
+.dk-selo-principal { font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 999px; background: #fff6dc; color: #7a5600; border: 1px solid #f5d27a; white-space: nowrap; }
+.dk-serv .dk-btn { min-height: 38px; padding: 6px 12px; font-size: 13.5px; white-space: nowrap; }
+.dk-excluir { color: #a3302f; border-color: #f0c9c9; }
+.dk-excluir:hover, .dk-excluir.confirmar { background: #fdecec; border-color: #e23b3b; color: #a3302f; }
+@media (max-width: 560px) { .dk-serv { grid-template-columns: 1fr auto; } .dk-serv .nome { grid-column: 1 / -1; } }
+
+/* Resumo: cada ponto é um link para o passo que o ajusta */
+.dk-val li button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; background: transparent; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.dk-val li button b { flex: none; font-size: 13px; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.7); border: 1px solid currentColor; }
+.dk-val li button:hover b { background: #fff; }
+/* Painel do ajuste guiado */
+.dk-ajuste { position: absolute; left: 50%; bottom: 82px; transform: translateX(-50%); width: min(760px, calc(100% - 24px)); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; background: var(--petroleo-fundo, #082f44); color: #fff; border-radius: 16px; padding: 14px 16px 14px 18px; box-shadow: 0 24px 50px -20px rgba(0,0,0,.55); z-index: 5; border-top: 4px solid var(--w7-vermelho); }
+.dk-ajuste.ok { border-top-color: var(--w7-verde); }
+.dk-ajuste .txt { display: grid; gap: 2px; min-width: 0; flex: 1 1 260px; }
+.dk-ajuste .r { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--w7-amarelo); font-weight: 700; }
+.dk-ajuste.ok .r { color: #8fe0a6; }
+.dk-ajuste b { font-size: 15px; line-height: 1.4; }
+.dk-ajuste .acoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.dk-ajuste .dk-btn { min-height: 40px; }
+.dk-ajuste .dk-btn:not(.primario) { background: transparent; color: #fff; border-color: rgba(255,255,255,.35); }
+.dk-ajuste .dk-btn.primario { background: var(--w7-amarelo); border-color: var(--w7-amarelo); color: #2a1d00; }
+@media (prefers-reduced-motion: no-preference) { .dk-ajuste:not([hidden]) { animation: dkSobe .35s cubic-bezier(.2,.7,.2,1) both; } }
+@media (max-width: 560px) { .dk-ajuste { bottom: 74px; padding: 12px; } .dk-ajuste .acoes { width: 100%; } .dk-ajuste .dk-btn { flex: 1; } }
+.dk.com-ajuste .dk-slide { padding-bottom: 150px; }
 
 </style>
 </head>
@@ -1273,7 +1325,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     { id: 'pagina', tipo: 'pagina', curto: 'Página principal', titulo: 'Nossa recomendação: a página principal',
       nota: 'Apresente a recomendação: a página principal é do {servico} com mais chance de retorno, na cidade {da_empresa}. Se houver modelo, mostre no celular da tela: vídeo, {conv_plural} e depoimentos são exemplos, e a versão publicada usa o material real {da_empresa}. Se {a_empresa} concordar, toque em "Confirmar como página principal". Pedido de mudança de layout fica para depois do material: o padrão é o que converte.' },
     { id: 'servicos', tipo: 'pergunta', numero: 2, curto: 'Outros {servicos}', titulo: 'Quais outros {servicos} entram além da página principal',
-      nota: 'Diga: "Além da página principal, a verba comporta mais estes {servicos}." Marque até o número de páginas que a verba permite, contando a principal. Os demais ficam para a próxima etapa.' },
+      nota: 'Diga: "Além da página principal, a verba comporta mais estes {servicos}." Se a principal não for a recomendada, toque em "Tornar principal" no {servico} certo. Marque até o número de páginas que a verba permite, contando a principal. Inclua o que surgir na conversa e exclua o que ficar de fora.' },
     { id: 'regioes', tipo: 'pergunta', numero: 3, curto: 'Regiões', titulo: 'Em quais regiões vamos anunciar', se: 'regioes',
       nota: 'Mostre o mapa do raio e o perfil no Google. Explique que a nota e as avaliações aparecem junto do anúncio, e quantas avaliações faltam para a próxima faixa. Para cada cidade pergunte: "Vale atender quem vem de lá?" Marque atuar ou não atuar. Cidade muito distante, ou sem demanda para {a_empresa}, fica de fora.' },
     { id: 'diferenciais', tipo: 'pergunta', numero: 4, curto: 'Diferenciais', titulo: 'O que vocês têm que os concorrentes não têm',
@@ -1283,7 +1335,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     { id: 'depoimentos', tipo: 'pergunta', numero: 6, curto: 'Depoimentos', titulo: 'Depoimentos em vídeo',
       nota: 'Explique: depoimento em vídeo de quem já foi atendido mostra pessoas reais e dá confiança para quem chega pelo anúncio; por isso aumenta a conversão da página. Pergunte se já têm. Se não, combine quem grava e até quando. Dica para passar: vídeo curto, gravado no celular em pé, a pessoa diz o nome e o que gostou.{nota_depoimentos_saude}' },
     { id: 'video', tipo: 'pergunta', numero: 7, curto: 'Vídeo da página', titulo: 'O vídeo de apresentação da página',
-      nota: 'Explique que o vídeo fica no topo da página e mostra a estrutura e a equipe. Ofereça três caminhos: {a_empresa} grava; a Win7 envia um roteiro pronto para gravar; ou a Win7 cria o vídeo com um agente de IA a partir de fotos e informações.' },
+      nota: 'Explique que o vídeo fica no topo da página e mostra a estrutura e a equipe. O roteiro é sempre da Win7. Ofereça dois caminhos: {a_empresa} grava a partir do roteiro que a Win7 envia, ou um agente de IA da Win7 cria o vídeo a partir de fotos e informações.' },
     { id: 'confirmacoes', tipo: 'pergunta', numero: 8, curto: 'Confirmar os dados', titulo: 'Para finalizar: confirmar os dados',
       nota: 'Leia os dados {da_empresa} que vão para a página e para os anúncios: nome, endereço, telefone, WhatsApp que recebe os contatos, horário e site. Marque confirmado ou corrigir e anote a correção. Depois passe pelos pontos em aberto do diagnóstico e registre quem participou.' },
     { id: 'fim', tipo: 'fim', titulo: 'Resumo e Mapa do Onboarding',
@@ -1369,6 +1421,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var base = estadoInicial(diag);
     Object.keys(base).forEach(function (k) { if (r[k] === undefined) r[k] = base[k]; });
     if (lista(r.servicos).length && !lista(r.servicos).some(function (x) { return x.principal; })) r.servicos[0].principal = true;
+    if (r.video_home && r.video_home.opcao === 'roteiro') r.video_home.opcao = 'cliente';
     return r;
   }
 
@@ -1401,9 +1454,8 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if ((dp.tem === 'nao' || dp.tem === 'alguns') && dp.vai_gravar === 'sim') p.push({ texto: 'Gravar depoimentos em vídeo', responsavel: texto(dp.responsavel) || 'Cliente', prazo: texto(dp.prazo) });
     if (dp.tem === 'nao' && dp.vai_gravar === 'nao') p.push({ texto: 'Página sai sem depoimentos em vídeo: rever na Etapa 2', responsavel: 'Win7', prazo: '' });
     var v = r.video_home || {};
-    if (v.opcao === 'cliente') p.push({ texto: 'Gravar o vídeo de apresentação da página', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo) });
-    if (v.opcao === 'roteiro') { p.push({ texto: 'Enviar o roteiro do vídeo de apresentação', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Gravar o vídeo a partir do roteiro', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo) }); }
-    if (v.opcao === 'ia') { p.push({ texto: 'Enviar fotos e informações para o vídeo com IA', responsavel: 'Cliente', prazo: texto(v.prazo) }); p.push({ texto: 'Criar o vídeo de apresentação com IA', responsavel: 'Win7', prazo: '' }); }
+    if (v.opcao === 'cliente' || v.opcao === 'roteiro') { p.push({ texto: 'Enviar o roteiro do vídeo de apresentação', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Gravar o vídeo a partir do roteiro', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo) }); }
+    if (v.opcao === 'ia') { p.push({ texto: 'Enviar fotos e informações para o vídeo com IA', responsavel: 'Cliente', prazo: texto(v.prazo) }); p.push({ texto: 'Criar o roteiro e o vídeo de apresentação com IA', responsavel: 'Win7', prazo: '' }); }
     lista(r.dados_cliente).forEach(function (x) { if (x.status === 'corrigir') p.push({ texto: 'Corrigir ' + x.rotulo.charAt(0).toLowerCase() + x.rotulo.slice(1) + ' na página e no perfil do Google', responsavel: 'Win7', prazo: '', obs: texto(x.correcao) }); });
     lista(r.confirmacoes).forEach(function (c) { if (c.status === 'pendente') p.push({ texto: c.texto, responsavel: 'Cliente', prazo: '', obs: texto(c.obs) }); });
     return p;
@@ -1446,37 +1498,43 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     };
   }
   function validarMapa(m) {
-    var erros = [], avisos = [];
+    var erros = [], avisos = [], pontos = [];
+    function E(t, passo) { erros.push(t); pontos.push({ tipo: 'erro', texto: t, passo: passo || '' }); }
+    function A(t, passo) { avisos.push(t); pontos.push({ tipo: 'aviso', texto: t, passo: passo || '' }); }
     var d = (m && m.decisoes) || {};
     var v = M.VOCAB[(m && m.cliente && m.cliente.setor) === 'geral' ? 'geral' : 'saude'];
-    if (!m || m.schema !== MAPA_SCHEMA || m.versao !== MAPA_VERSAO) erros.push('Mapa com formato desconhecido.');
+    if (!m || m.schema !== MAPA_SCHEMA || m.versao !== MAPA_VERSAO) E('Mapa com formato desconhecido.');
     var vb = d.verba || {};
-    if (!(vb.mensal > 0)) erros.push('Falta a verba mensal para o Google (pergunta 1).');
-    else if (!(vb.paginas > 0)) erros.push('A verba informada fica abaixo de ' + M.moeda(vb.minimo_por_pagina) + ' por mês: não comporta nenhuma página. Reveja a verba com o cliente.');
-    if (!lista(d.servicos).length) erros.push('Nenhum ' + v.servico + ' confirmado para anunciar (pergunta 2).');
-    else if (vb.paginas > 0 && d.servicos.length > vb.paginas) avisos.push(d.servicos.length + ' ' + v.servicos + ' confirmados para ' + pl(vb.paginas, 'página', 'páginas') + ': os excedentes começam na próxima etapa, ou a verba precisa subir.');
-    if (!d.convenios || !d.convenios.situacao) erros.push('Falta responder sobre convênios (pergunta 5).');
-    if (!d.depoimentos || !d.depoimentos.tem) erros.push('Falta responder sobre depoimentos em vídeo (pergunta 6).');
-    else {
-      if ((d.depoimentos.tem === 'sim' || d.depoimentos.tem === 'alguns') && !d.depoimentos.vai_enviar) avisos.push('Depoimentos: falta combinar o envio dos vídeos que já existem.');
-      if ((d.depoimentos.tem === 'nao' || d.depoimentos.tem === 'alguns') && !d.depoimentos.vai_gravar) avisos.push('Depoimentos: falta combinar se vão gravar.');
-    }
-    if (!d.video_home || !d.video_home.opcao) erros.push('Falta definir o vídeo de apresentação da página (pergunta 7).');
+    if (!(vb.mensal > 0)) E('Falta a verba mensal para o Google (pergunta 1).', 'verba');
+    else if (!(vb.paginas > 0)) E('A verba informada fica abaixo de ' + M.moeda(vb.minimo_por_pagina) + ' por mês: não comporta nenhuma página. Reveja a verba com o cliente.', 'verba');
+    if (!lista(d.servicos).length) E('Nenhum ' + v.servico + ' confirmado para anunciar (pergunta 2).', 'servicos');
+    else if (vb.paginas > 0 && d.servicos.length > vb.paginas) A(d.servicos.length + ' ' + v.servicos + ' confirmados para ' + pl(vb.paginas, 'página', 'páginas') + ': os excedentes começam na próxima etapa, ou a verba precisa subir.', 'servicos');
     var cd = d.cidades || {};
     if ((lista(cd.atuar).length + lista(cd.nao_atuar).length + lista(cd.sem_decisao).length) > 0) {
-      if (!lista(cd.atuar).length) erros.push('Nenhuma cidade marcada para atuar (pergunta 3).');
-      if (lista(cd.sem_decisao).length) avisos.push(pl(cd.sem_decisao.length, 'cidade', 'cidades') + ' sem decisão: ' + cd.sem_decisao.map(function (c) { return c.nome; }).join(', ') + '.');
+      if (!lista(cd.atuar).length) E('Nenhuma cidade marcada para atuar (pergunta 3).', 'regioes');
+      if (lista(cd.sem_decisao).length) A(pl(cd.sem_decisao.length, 'cidade', 'cidades') + ' sem decisão: ' + cd.sem_decisao.map(function (c) { return c.nome; }).join(', ') + '.', 'regioes');
     }
-    if (!lista(d.diferenciais).length) avisos.push('Nenhum diferencial registrado (pergunta 4): os anúncios ficam genéricos.');
+    if (!d.convenios || !d.convenios.situacao) E('Falta responder sobre convênios (pergunta 5).', 'convenios');
+    if (!d.depoimentos || !d.depoimentos.tem) E('Falta responder sobre depoimentos em vídeo (pergunta 6).', 'depoimentos');
+    else {
+      if ((d.depoimentos.tem === 'sim' || d.depoimentos.tem === 'alguns') && !d.depoimentos.vai_enviar) A('Depoimentos: falta combinar o envio dos vídeos que já existem.', 'depoimentos');
+      if ((d.depoimentos.tem === 'nao' || d.depoimentos.tem === 'alguns') && !d.depoimentos.vai_gravar) A('Depoimentos: falta combinar se vão gravar.', 'depoimentos');
+    }
+    if (!d.video_home || !d.video_home.opcao) E('Falta definir o vídeo de apresentação da página (pergunta 7).', 'video');
+    if (!lista(d.diferenciais).length) A('Nenhum diferencial registrado (pergunta 4): os anúncios ficam genéricos.', 'diferenciais');
     var rec = texto(d.pagina_principal_recomendada);
-    if (lista(d.servicos).length && rec && lista(d.servicos).indexOf(rec) < 0) avisos.push('A página principal recomendada (' + rec + ') não foi confirmada: a principal passa a ser ' + d.pagina_principal + '.');
+    if (lista(d.servicos).length && rec && lista(d.servicos).indexOf(rec) < 0) A('A página principal (' + rec + ') não está marcada para anunciar: a principal passa a ser ' + d.pagina_principal + '.', 'servicos');
     var dc = lista(d.dados_cliente), semConf = dc.filter(function (x) { return x.status === 'sem resposta'; }).length;
-    if (semConf) avisos.push(pl(semConf, 'dado', 'dados') + ' ' + 'do cliente sem conferência' + ' (pergunta 8).');
-    if (dc.some(function (x) { return x.campo === 'whatsapp' && !x.valor && x.status !== 'corrigir'; })) avisos.push('Falta o WhatsApp que recebe os contatos (pergunta 8).');
+    if (semConf) A(pl(semConf, 'dado', 'dados') + ' do cliente sem conferência (pergunta 8).', 'confirmacoes');
+    if (dc.some(function (x) { return x.campo === 'whatsapp' && !x.valor && x.status !== 'corrigir'; })) A('Falta o WhatsApp que recebe os contatos (pergunta 8).', 'confirmacoes');
     var semResp = lista(m && m.confirmacoes).filter(function (c) { return c.status === 'sem resposta'; }).length;
-    if (semResp) avisos.push(pl(semResp, 'ponto para confirmar', 'pontos para confirmar') + ' sem resposta (pergunta 8).');
-    return { erros: erros, avisos: avisos };
+    if (semResp) A(pl(semResp, 'ponto para confirmar', 'pontos para confirmar') + ' sem resposta (pergunta 8).', 'confirmacoes');
+    // ordem do roteiro, obrigatórios antes dos avisos
+    var ordem = ['verba', 'pagina', 'servicos', 'regioes', 'diferenciais', 'convenios', 'depoimentos', 'video', 'confirmacoes'];
+    pontos.sort(function (a, b) { return (a.tipo === b.tipo ? 0 : a.tipo === 'erro' ? -1 : 1) || ordem.indexOf(a.passo) - ordem.indexOf(b.passo); });
+    return { erros: erros, avisos: avisos, pontos: pontos };
   }
+
 
   // ---------------------------------------------------------------- HTML do Mapa (vai para o cliente: sem notas de condução)
   function gerarMapaHtml(m, diag, opcoes) {
@@ -1490,7 +1548,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     function card(rotulo, valor, sub) { return '<div class="mapa-card"><div class="mc-rot">' + esc(rotulo) + '</div><div class="mc-val">' + valor + '</div>' + (sub ? '<div class="mc-sub">' + sub + '</div>' : '') + '</div>'; }
     var simNao = { sim: 'Sim', nao: 'Não', na: 'Não se aplica', alguns: 'Alguns' };
     var Empresa = vocab.a_empresa.charAt(0).toUpperCase() + vocab.a_empresa.slice(1);
-    var videoOp = { cliente: [Empresa + ' grava', ''], roteiro: ['Roteiro da Win7', 'A Win7 envia o roteiro e ' + vocab.a_empresa + ' grava'], ia: ['Criado com IA', 'A Win7 cria a partir de fotos e informações ' + vocab.da_empresa] };
+    var videoOp = { cliente: [Empresa + ' grava', 'Com o roteiro que a Win7 envia'], roteiro: [Empresa + ' grava', 'Com o roteiro que a Win7 envia'], ia: ['Criado com IA', 'A Win7 cria o roteiro e o vídeo a partir de fotos e informações ' + vocab.da_empresa] };
     var vid = videoOp[d.video_home.opcao] || ['sem definição', ''];
     var principal = texto(d.pagina_principal);
     var cards = [
@@ -1548,7 +1606,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   'use strict';
   var M = window.MotorDiagnostico, O = window.OnboardingW7;
   var esc = M.esc, md = M.md, moeda = M.moeda;
-  var st = { diag: null, r: null, slides: [], i: 0, dir: 1, ativos: {}, cssLaudo: '', logoCliente: '', notas: false, gaveta: false, chave: '', timer: null, tAnima: null, mapa: null, el: null };
+  var st = { diag: null, r: null, slides: [], i: 0, dir: 1, ativos: {}, cssLaudo: '', logoCliente: '', notas: false, gaveta: false, chave: '', timer: null, tAnima: null, mapa: null, el: null, ajuste: false };
   var MOVIMENTO = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   // ---------------------------------------------------------------- utilidades
@@ -1585,7 +1643,15 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   function marcar(campo, rotulo, valor) { return '<label class="dk-check' + (valor ? ' marcado' : '') + '"><input type="checkbox" data-campo="' + campo + '"' + (valor ? ' checked' : '') + '>' + esc(rotulo) + '</label>'; }
   function cabec(s) { return '<div class="dk-rot">' + (s.numero ? '<span class="num">Pergunta ' + s.numero + '</span>' : '') + esc(rotuloTipo(s)) + '</div><h2>' + esc(s.titulo) + '</h2>'; }
   function rotuloTipo(s) { return ({ capa: '', agenda: 'Roteiro', ouvimos: 'Diagnóstico', placar: 'Diagnóstico', busca: 'Diagnóstico', site: 'Diagnóstico', pagina: 'Recomendação', gmn: 'Diagnóstico', pergunta: 'Decisão', fim: 'Fechamento' })[s.tipo] || ''; }
-  function ecg() { return '<svg class="dk-ecg" viewBox="0 0 1000 46" preserveAspectRatio="none" aria-hidden="true"><path class="coracao" d="M14 22c-4-6-12-4-12 2 0 5 7 9 12 14 5-5 12-9 12-14 0-6-8-8-12-2z"/><path d="M30 30H700l14 5 14-31 16 40 12-20 10 6H1000"/></svg>'; }
+  function ecg() { return '<svg class="dk-ecg" viewBox="0 0 1000 46" preserveAspectRatio="none" aria-hidden="true"><path class="coracao" d="M14 22c-4-6-12-4-12 2 0 5 7 9 12 14 5-5 12-9 12-14 0-6-8-8-12-2z"/><path class="base" d="M30 30H700l14 5 14-31 16 40 12-20 10 6H1000"/><path class="luz" pathLength="1000" d="M30 30H700l14 5 14-31 16 40 12-20 10 6H1000"/></svg>'; }
+  /** Faixa de batimento em todos os slides: a análise da Win7 Med acontecendo (traço contínuo e coração pulsando). */
+  function faixaPulso() {
+    var d = 'M0 17';
+    [170, 570, 970].forEach(function (b) { d += ' H' + b + ' l7 -4 l7 4 H' + (b + 26) + ' l5 4 l9 -17 l10 22 l8 -12 l5 3'; });
+    d += ' H1200';
+    return '<div class="dk-pulso" aria-hidden="true"><svg class="bate" viewBox="0 0 26 24"><path d="M13 22C6 16 1 12 1 7a5.5 5.5 0 0 1 12-2 5.5 5.5 0 0 1 12 2c0 5-5 9-12 15z"/></svg>' +
+      '<svg class="traco" viewBox="0 0 1200 30" preserveAspectRatio="none"><path class="base" d="' + d + '"/><path class="luz" pathLength="1000" d="' + d + '"/></svg></div>';
+  }
   function vocab() { return M.vocabDe(st.diag); }
   function logo() { var v = vocab(); return v.setor === 'saude' ? st.ativos.logo : (st.ativos.logoGeral || st.ativos.logo); }
   function placar() { return M.pontuar(st.diag); }
@@ -1696,11 +1762,17 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   };
   R.servicos = function (s) {
     var vb = O.calcularVerba(st.r), v = vocab(), ip = iPrincipal(), sel = st.r.servicos.filter(function (x) { return x.confirmado; }).length;
-    var principal = st.r.servicos[ip];
     var info = vb.paginas > 0 ? 'A verba comporta ' + vb.paginas + (vb.paginas > 1 ? ' páginas' : ' página') + ': a principal' + (vb.paginas > 1 ? ' e mais ' + (vb.paginas - 1) : ' e nenhuma outra por agora') + '. Marcadas: ' + sel + '.' : 'Defina a verba na pergunta 1 para saber quantas páginas cabem agora. Marcadas: ' + sel + '.';
+    var ordem = st.r.servicos.map(function (x, i) { return i; }).sort(function (a, b) { return (a === ip ? -1 : b === ip ? 1 : a - b); });
+    var linhas = ordem.map(function (i) {
+      var x = st.r.servicos[i], principal = i === ip;
+      return '<div class="dk-serv' + (principal ? ' principal' : '') + (x.confirmado ? ' marcado' : '') + '">' +
+        '<label class="nome"><input type="checkbox" data-campo="servicos.' + i + '.confirmado"' + (x.confirmado ? ' checked' : '') + '><span>' + esc(x.nome) + (x.sugerido ? '' : ' <small>incluído na reunião</small>') + '</span></label>' +
+        (principal ? '<span class="dk-selo-principal">Página principal</span>' : '<button type="button" class="dk-btn" data-acao="principal" data-i="' + i + '">Tornar principal</button>') +
+        '<button type="button" class="dk-btn dk-excluir" data-acao="excluir-servico" data-i="' + i + '" aria-label="Excluir ' + esc(x.nome) + '">Excluir</button></div>';
+    }).join('');
     return cabec(s) + '<p class="dk-lead"><strong>' + esc(info) + '</strong></p>' +
-      (principal ? '<div class="dk-zona-rot">Página principal</div><div class="dk-grade">' + marcar('servicos.' + ip + '.confirmado', principal.nome, principal.confirmado) + '</div>' : '') +
-      '<div class="dk-zona-rot">Também anunciar</div><div class="dk-grade">' + st.r.servicos.map(function (x, i) { return i === ip ? '' : marcar('servicos.' + i + '.confirmado', x.nome + (x.sugerido ? '' : ' (incluído na reunião)'), x.confirmado); }).join('') + '</div>' +
+      '<div class="dk-servs">' + (linhas || '<p class="dk-lead">Nenhum ' + v.servico + ' na lista. Inclua abaixo.</p>') + '</div>' +
       (vb.paginas > 0 && sel > vb.paginas ? '<p class="dk-aviso">' + sel + ' marcados para ' + vb.paginas + (vb.paginas > 1 ? ' páginas' : ' página') + ': os excedentes entram na próxima etapa ou a verba precisa subir.</p>' : '') +
       '<div class="dk-linha"><label class="dk-campo">Incluir outro ' + v.servico + '<input type="text" id="dk-novo-servico" placeholder="nome do ' + v.servico + '" autocomplete="off"></label><button type="button" class="dk-btn" data-acao="add-servico">Incluir</button></div>';
   };
@@ -1763,8 +1835,8 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   };
   R.video = function (s) {
     var vh = st.r.video_home, v = vocab();
-    var ops = [['cliente', v.a_empresa.charAt(0).toUpperCase() + v.a_empresa.slice(1) + ' grava', 'Vídeo curto mostrando a estrutura e a equipe.'], ['roteiro', 'Win7 envia o roteiro', 'Mandamos um roteiro pronto e ' + v.a_empresa + ' grava.'], ['ia', 'Win7 cria com IA', 'Um agente de IA da Win7 cria o vídeo a partir de fotos e informações.']];
-    return cabec(s) + '<p class="dk-lead">O vídeo fica no topo da página: é a primeira coisa que o ' + v.cliente_final + ' vê ao chegar pelo anúncio.</p><div class="dk-opcoes">' +
+    var ops = [['cliente', v.a_empresa.charAt(0).toUpperCase() + v.a_empresa.slice(1) + ' grava', 'A Win7 envia o roteiro e ' + v.a_empresa + ' grava um vídeo curto mostrando a estrutura e a equipe.'], ['ia', 'Win7 cria com IA', 'A Win7 cria o roteiro e um agente de IA monta o vídeo a partir de fotos e informações.']];
+    return cabec(s) + '<p class="dk-lead">O vídeo fica no topo da página: é a primeira coisa que o ' + v.cliente_final + ' vê ao chegar pelo anúncio. O roteiro é sempre da Win7.</p><div class="dk-opcoes">' +
       ops.map(function (o) { return '<button type="button" class="dk-opcao" data-campo="video_home.opcao" data-valor="' + o[0] + '" aria-pressed="' + (vh.opcao === o[0]) + '"><b>' + esc(o[1]) + '</b><span>' + esc(o[2]) + '</span></button>'; }).join('') + '</div>' +
       (vh.opcao ? '<div class="dk-linha">' + entrada('video_home.responsavel', 'Quem cuida', vh.responsavel, 'nome') + entrada('video_home.prazo', 'Até quando', vh.prazo, 'ex.: 30/10') + '</div><div class="dk-sec">' + entrada('video_home.observacao', 'Observação', vh.observacao, '') + '</div>' : '');
   };
@@ -1791,12 +1863,16 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       ['Diferenciais', String(d.diferenciais.length), d.diferenciais.map(function (x) { return x.rotulo; }).join(' · ')],
       ['Convênios', simNao[d.convenios.situacao] || 'falta', d.convenios.pedir_lista ? 'pedir lista no grupo' : ''],
       ['Depoimentos', simNao[d.depoimentos.tem] || 'falta', [d.depoimentos.vai_enviar === 'sim' ? 'vão enviar' : '', d.depoimentos.vai_gravar === 'sim' ? 'vão gravar' : ''].filter(Boolean).join(' · ')],
-      ['Vídeo da página', ({ cliente: 'Grava', roteiro: 'Roteiro da Win7', ia: 'Win7 com IA' })[d.video_home.opcao] || 'falta', ''],
+      ['Vídeo da página', ({ cliente: 'Grava', roteiro: 'Grava', ia: 'Win7 com IA' })[d.video_home.opcao] || 'falta', d.video_home.opcao ? 'roteiro da Win7' : ''],
       ['Dados conferidos', d.dados_cliente.filter(function (x) { return x.status === 'ok'; }).length + ' de ' + d.dados_cliente.length, d.dados_cliente.some(function (x) { return x.status === 'corrigir'; }) ? 'com correções' : ''],
       ['Pendências', String(m.pendencias.length), '']
     ].map(function (c) { return '<div class="c"><div class="r">' + esc(c[0]) + '</div><div class="v">' + esc(c[1]) + '</div><div class="s">' + esc(c[2]) + '</div></div>'; }).join('');
-    var lista = function (cls, itens) { return itens.length ? '<ul class="dk-val ' + cls + '">' + itens.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : ''; };
-    return cabec(s) + '<div class="dk-cards">' + cards + '</div>' + lista('erros', val.erros) + lista('avisos', val.avisos) +
+    var lista = function (cls, tipo) {
+      var itens = val.pontos.filter(function (p) { return p.tipo === tipo; });
+      return itens.length ? '<ul class="dk-val ' + cls + '">' + itens.map(function (p) { return '<li>' + (p.passo ? '<button type="button" data-ponto="' + esc(p.passo) + '"><span>' + esc(p.texto) + '</span><b>Ajustar</b></button>' : esc(p.texto)) + '</li>'; }).join('') + '</ul>' : '';
+    };
+    var guia = val.pontos.some(function (p) { return p.passo; }) ? '<div class="dk-gerado"><button type="button" class="dk-btn" data-acao="comecar-ajuste">Ajustar ponto a ponto (' + val.pontos.filter(function (p) { return p.passo; }).length + ')</button></div>' : '';
+    return cabec(s) + '<div class="dk-cards">' + cards + '</div>' + lista('erros', 'erro') + lista('avisos', 'aviso') + guia +
       '<div class="dk-gerado"><button type="button" class="dk-btn primario dk-grande" data-acao="gerar-mapa"' + (val.erros.length ? ' disabled' : '') + '>Gerar mapeamento em PDF</button>' +
       (st.mapa ? '<button type="button" class="dk-btn" data-acao="imprimir">PDF de novo</button><button type="button" class="dk-btn" data-acao="abrir-mapa">Abrir o Mapa</button><button type="button" class="dk-btn" data-acao="baixar-mapa">Baixar Mapa (HTML)</button><button type="button" class="dk-btn" data-acao="baixar-json">Baixar dados (JSON)</button>' : '') + '</div>' +
       '<div class="dk-gerado" style="margin-top:22px"><button type="button" class="dk-btn" data-acao="exportar">Exportar rascunho</button><label class="dk-btn" style="position:relative;overflow:hidden">Importar rascunho<input type="file" accept=".json,application/json" data-acao="importar" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button type="button" class="dk-btn" data-acao="apagar">Apagar deste aparelho</button></div>';
@@ -1809,7 +1885,9 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     el.innerHTML = '<div class="dk-faixa" aria-hidden="true"><span class="a"></span><span class="v"></span><span class="g"></span><span class="b"></span></div>' +
       '<header class="dk-topo"><img class="dk-logo" alt=""><div class="dk-cli"><b></b><span></span></div><div class="dk-prog" aria-hidden="true"></div><div class="dk-acoes"><span class="dk-salvo" aria-live="polite"></span>' +
       '<button type="button" class="dk-btn" data-acao="roteiro">Roteiro</button><button type="button" class="dk-btn" data-acao="notas" aria-pressed="false" title="Notas de quem conduz (tecla N)">Notas</button><button type="button" class="dk-btn" data-acao="sair">Sair</button></div></header>' +
+      faixaPulso() +
       '<main class="dk-palco"><div class="dk-slide" tabindex="-1"></div></main>' +
+      '<div class="dk-ajuste" hidden role="status" aria-live="polite"></div>' +
       '<aside class="dk-notas" hidden aria-live="polite"><div class="r">Como conduzir</div><p></p></aside>' +
       '<aside class="dk-gaveta" hidden><h3>Roteiro da reunião <button type="button" class="dk-btn" data-acao="roteiro">Fechar</button></h3><ol></ol></aside>' +
       '<nav class="dk-nav"><button type="button" class="dk-btn" data-acao="ant">Anterior</button><span class="dk-pontos"></span><button type="button" class="dk-btn primario" data-acao="prox">Próximo</button></nav>';
@@ -1842,6 +1920,28 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var prox = st.el.querySelector('[data-acao="prox"]'); prox.disabled = st.i === st.slides.length - 1; prox.textContent = st.i === st.slides.length - 2 ? 'Resumo' : 'Próximo';
     st.el.querySelector('.dk-gaveta ol').innerHTML = st.slides.map(function (x, k) { return '<li><button type="button" data-ir="' + k + '"' + (k === st.i ? ' aria-current="true"' : '') + '>' + (k + 1) + '. ' + esc(x.numero ? 'Pergunta ' + x.numero + ': ' + x.titulo : x.titulo) + '</button></li>'; }).join('');
     if (manterRolagem) palco.scrollTop = y; else { palco.scrollTop = 0; slide.focus({ preventScroll: true }); animarEntrada(slide); }
+    painelAjuste();
+  }
+  function pontosPendentes() { return O.validarMapa(O.montarMapa(st.diag, st.r)).pontos.filter(function (p) { return p.passo && indicePasso(p.passo) >= 0; }); }
+  function indicePasso(id) { for (var k = 0; k < st.slides.length; k++) if (st.slides[k].id === id) return k; return -1; }
+  /** Vai para o próximo passo com ponto pendente, a partir do atual; sem pendências, volta ao resumo. */
+  function proximoPonto() {
+    var atual = st.slides[st.i].id, pend = pontosPendentes().filter(function (p) { return p.passo !== atual; });
+    if (!pend.length) { st.ajuste = false; ir(st.slides.length - 1); desenhar(true); toast('Tudo ajustado. Agora é só gerar o mapeamento.'); return; }
+    var idx = pend.map(function (p) { return indicePasso(p.passo); }).sort(function (a, b) { return a - b; });
+    var depois = idx.filter(function (k) { return k > st.i; })[0];
+    ir(depois !== undefined ? depois : idx[0]);
+  }
+  function painelAjuste() {
+    var el = st.el.querySelector('.dk-ajuste'), s = st.slides[st.i];
+    if (!st.ajuste || !s || s.tipo === 'fim') { el.hidden = true; st.el.classList.remove('com-ajuste'); return; }
+    st.el.classList.add('com-ajuste');
+    var pend = pontosPendentes(), aqui = pend.filter(function (p) { return p.passo === s.id; }), outros = pend.filter(function (p) { return p.passo !== s.id; });
+    el.hidden = false;
+    el.className = 'dk-ajuste' + (aqui.length ? '' : ' ok');
+    el.innerHTML = '<div class="txt"><span class="r">' + (aqui.length ? 'Ajuste neste passo' : 'Este passo está resolvido') + '</span><b>' + esc(aqui.length ? aqui[0].texto : (outros.length ? 'Faltam ' + outros.length + (outros.length > 1 ? ' pontos' : ' ponto') + ' em outros passos.' : 'Nenhum ponto pendente.')) + '</b></div>' +
+      '<div class="acoes">' + (outros.length ? '<button type="button" class="dk-btn primario" data-acao="proximo-ponto">Próximo ponto (' + outros.length + ')</button>' : '<button type="button" class="dk-btn primario" data-acao="voltar-resumo">Voltar ao resumo</button>') +
+      (outros.length ? '<button type="button" class="dk-btn" data-acao="voltar-resumo">Resumo</button>' : '') + '<button type="button" class="dk-btn" data-acao="sair-ajuste" aria-label="Fechar o ajuste guiado">Fechar</button></div>';
   }
   /** Motion da apresentação: só na troca de slide, nunca ao marcar uma resposta; respeita "reduzir movimento". */
   function animarEntrada(slide) {
@@ -1877,6 +1977,8 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       if (b.dataset.campo === 'verba.modo' && valor === null) definir('verba.modo', 'mensal');
       desenhar(true); return;
     }
+    var pt = e.target.closest('[data-ponto]');
+    if (pt) { st.ajuste = true; var ix = indicePasso(pt.dataset.ponto); if (ix >= 0) ir(ix); return; }
     var irPara = e.target.closest('[data-ir]');
     if (irPara) { st.gaveta = false; st.el.querySelector('.dk-gaveta').hidden = true; ir(Number(irPara.dataset.ir)); return; }
     var a = e.target.closest('[data-acao]'); if (!a || a.tagName === 'INPUT') return;
@@ -1890,6 +1992,17 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     else if (acao === 'add-cidade') { var nc = st.el.querySelector('#dk-nova-cidade').value.trim(); var km = num(st.el.querySelector('#dk-nova-km').value); if (nc) { st.r.cidades.push({ nome: nc, uf: '', km: km, zona: 0, atuar: true, adicionada: true }); salvar(); desenhar(true); } }
     else if (acao === 'gerar-mapa') gerarMapa();
     else if (acao === 'imprimir' && st.mapa) imprimir();
+    else if (acao === 'principal') { var ni = Number(a.dataset.i); st.r.servicos.forEach(function (x, k) { x.principal = k === ni; }); if (st.r.servicos[ni]) st.r.servicos[ni].confirmado = true; salvar(); desenhar(true); }
+    else if (acao === 'excluir-servico') {
+      if (a.dataset.confirmar !== '1') { a.dataset.confirmar = '1'; a.textContent = 'Confirmar exclusão'; a.classList.add('confirmar'); setTimeout(function () { if (a.isConnected) { a.dataset.confirmar = ''; a.textContent = 'Excluir'; a.classList.remove('confirmar'); } }, 4000); return; }
+      var xi = Number(a.dataset.i), era = st.r.servicos[xi]; st.r.servicos.splice(xi, 1);
+      if (era && era.principal && st.r.servicos.length) st.r.servicos[0].principal = true;
+      salvar(); desenhar(true); toast((era ? era.nome : 'O item') + ' saiu da lista.');
+    }
+    else if (acao === 'comecar-ajuste') { st.ajuste = true; proximoPonto(); }
+    else if (acao === 'proximo-ponto') proximoPonto();
+    else if (acao === 'voltar-resumo') { st.ajuste = false; ir(st.slides.length - 1); }
+    else if (acao === 'sair-ajuste') { st.ajuste = false; painelAjuste(); }
     else if (acao === 'confirmar-principal') { var ip = iPrincipal(); if (st.r.servicos[ip]) { st.r.servicos[ip].confirmado = !st.r.servicos[ip].confirmado; salvar(); desenhar(true); } }
     else if (acao === 'abrir-mapa' && st.mapa) window.open(URL.createObjectURL(new Blob([st.mapa.html], { type: 'text/html;charset=utf-8' })), '_blank', 'noopener');
     else if (acao === 'baixar-mapa' && st.mapa) baixar('mapa-onboarding-' + st.r.cliente.slug + '.html', st.mapa.html, 'text/html;charset=utf-8');
@@ -1904,6 +2017,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   function aoDigitar(e) {
     var t = e.target; if (!t.dataset || !t.dataset.campo || t.type === 'checkbox') return;
     definir(t.dataset.campo, t.value);
+    if (st.ajuste) painelAjuste();
     var calc = st.el.querySelector('#dk-calc'); if (calc) { calc.innerHTML = calcVerbaHtml(); if (MOVIMENTO) { calc.classList.remove('pulsa'); void calc.offsetWidth; calc.classList.add('pulsa'); } }
   }
   function aoMudar(e) {
