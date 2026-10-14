@@ -488,6 +488,14 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 .dk .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .dk-linha:has(.dk-data) { align-items: flex-start; }
 
+/* Fundo do banner trocado ao vivo no modelo (ADR-007, etapa A) */
+.dk-bases { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; }
+.dk-bases span { width: 100%; text-align: center; font-size: 13px; font-weight: 700; color: var(--apagado); }
+.dk-bases button { font: inherit; font-size: 13.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; border: 1.5px solid var(--linha-forte, #c9d6de); background: #fff; color: var(--tinta); cursor: pointer; }
+.dk-bases button[aria-pressed="true"] { border-color: var(--petroleo); background: var(--petroleo); color: #fff; }
+.dk-bases-cel { display: none; }
+@media (max-width: 560px) { .dk-bases-cel { display: block; margin-top: 4px; } }
+
 </style>
 </head>
 <body>
@@ -1432,6 +1440,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var pr = diag.presenca || {}, g = pr.google || {}, links = c.links || {};
     var dados = [['nome', 'Nome que aparece na página e no Google', texto(c.nome)], ['endereco', 'Endereço', texto(g.endereco)], ['telefone', 'Telefone', texto(g.telefone)],
       ['whatsapp', 'WhatsApp que recebe os contatos', ''], ['horario', 'Horário de atendimento', texto(g.horario)], ['site', 'Site atual', texto(links.site || (pr.site || {}).url)]]
+      .concat(camposEmpresa(M.vocabDe(diag).setor === 'saude'))
       .map(function (x) { return { campo: x[0], rotulo: x[1], valor: x[2], editavel: !x[2], status: null, correcao: '' }; });
     return {
       schema: RESPOSTAS_SCHEMA, versao: 1,
@@ -1454,6 +1463,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       video_home: { opcao: null, responsavel: '', prazo: '', observacao: '' },
       dados_cliente: dados,
       dominio: { modo: null, escolhido: '', sugestoes: dominiosIniciais(diag) },
+      lp_base: baseDe((diag.lp_modelo || {}).base),
       confirmacoes: lista(diag.perguntas_reuniao).map(function (q) { return { texto: texto(q), status: null, obs: '' }; }),
       participantes: '', observacoes: ''
     };
@@ -1509,6 +1519,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if (n.length <= 10) return '(' + n.slice(0, 2) + ') ' + n.slice(2, 6) + '-' + n.slice(6);
     return '(' + n.slice(0, 2) + ') ' + n.slice(2, 7) + '-' + n.slice(7);
   }
+  function mascaraCnpj(t) { var n = String(t || '').replace(/\D/g, '').slice(0, 14); return n.replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2'); }
   function mascaraData(t) { var n = String(t || '').replace(/\D/g, '').slice(0, 8); return n.length <= 2 ? n : n.length <= 4 ? n.slice(0, 2) + '/' + n.slice(2) : n.slice(0, 2) + '/' + n.slice(2, 4) + '/' + n.slice(4); }
   /** Os prazos da reunião, com o passo onde se ajustam. */
   var PRAZOS = [
@@ -1549,9 +1560,20 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   }
 
   /** Rascunho salvo numa versão anterior do roteiro: completa os campos novos sem perder as respostas. */
+  /** Campos que a página real precisa (ADR-007): RT na saúde e os dados da empresa para a política de privacidade. */
+  function camposEmpresa(saude) {
+    return (saude ? [['rt', 'Responsável técnico (nome e CRM)', '']] : []).concat([['razao_social', 'Razão social (vai na política de privacidade)', ''], ['cnpj', 'CNPJ', ''], ['email_privacidade', 'E-mail para pedidos sobre dados pessoais', '']]);
+  }
+  /** Base do banner: 1 Órbitas, 2 Ondas, 3 Varredura (a mesma escolhida no modelo, trocável na reunião). */
+  var BASES_BANNER = { 1: 'Órbitas', 2: 'Ondas', 3: 'Varredura' };
+  function baseDe(x) { x = +x; return BASES_BANNER[x] ? x : 1; }
+
   function migrar(r, diag) {
     var base = estadoInicial(diag);
     Object.keys(base).forEach(function (k) { if (r[k] === undefined) r[k] = base[k]; });
+    // conversas salvas antes da etapa A ganham os campos novos de "Confirmar os dados"
+    var tem = lista(r.dados_cliente).map(function (x) { return x.campo; });
+    lista(base.dados_cliente).forEach(function (x) { if (tem.indexOf(x.campo) < 0) r.dados_cliente.push(x); });
     if (lista(r.servicos).length && !lista(r.servicos).some(function (x) { return x.principal; })) r.servicos[0].principal = true;
     if (r.video_home && r.video_home.opcao === 'roteiro') r.video_home.opcao = 'cliente';
     return r;
@@ -1593,6 +1615,9 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var v = r.video_home || {};
     if (v.opcao === 'cliente' || v.opcao === 'roteiro') { p.push({ texto: 'Enviar o roteiro do vídeo de apresentação', responsavel: 'Win7', prazo: '' }); p.push({ texto: 'Gravar o vídeo a partir do roteiro', responsavel: texto(v.responsavel) || 'Cliente', prazo: texto(v.prazo), obs: obsPrazo('video_home.prazo') }); }
     if (v.opcao === 'ia') { p.push({ texto: 'Enviar fotos e informações para o vídeo com IA', responsavel: 'Cliente', prazo: texto(v.prazo), obs: obsPrazo('video_home.prazo') }); p.push({ texto: 'Criar o roteiro e o vídeo de apresentação com IA', responsavel: 'Win7', prazo: '' }); }
+    var dce = {}; lista(r.dados_cliente).forEach(function (x) { dce[x.campo] = texto(x.status === 'corrigir' ? x.correcao : x.valor); });
+    if ('rt' in dce && !dce.rt) p.push({ texto: 'Enviar nome e CRM do responsável técnico', responsavel: 'Cliente', prazo: '' });
+    if ('razao_social' in dce && (!dce.razao_social || !dce.cnpj || !dce.email_privacidade)) p.push({ texto: 'Enviar razão social, CNPJ e e-mail para a política de privacidade', responsavel: 'Cliente', prazo: '' });
     lista(r.dados_cliente).forEach(function (x) { if (x.status === 'corrigir') p.push({ texto: 'Corrigir ' + x.rotulo.charAt(0).toLowerCase() + x.rotulo.slice(1) + ' na página e no perfil do Google', responsavel: 'Win7', prazo: '', obs: texto(x.correcao) }); });
     lista(r.confirmacoes).forEach(function (c) { if (c.status === 'pendente') p.push({ texto: c.texto, responsavel: 'Cliente', prazo: '', obs: texto(c.obs) }); });
     return p;
@@ -1613,6 +1638,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
         verba: { modo: (r.verba || {}).modo || 'mensal', mensal: vb.mensal, paginas: vb.paginas, minimo_por_pagina: vb.minimo, por_pagina_mes: Math.round(vb.por_pagina_mes), por_pagina_dia: Math.round(vb.por_pagina_dia) },
         pagina_principal: (lista(r.servicos).filter(function (s) { return s.confirmado && s.principal; })[0] || {}).nome || confirmados[0] || '',
         pagina_principal_recomendada: (lista(r.servicos).filter(function (s) { return s.principal; })[0] || {}).nome || '',
+        base_banner: { n: baseDe(r.lp_base), nome: BASES_BANNER[baseDe(r.lp_base)] },
         servicos: confirmados,
         servicos_proxima_etapa: lista(r.servicos).filter(function (s) { return !s.confirmado; }).map(function (s) { return texto(s.nome); }).filter(Boolean),
         diferenciais: diferenciaisLegiveis(r),
@@ -1672,6 +1698,11 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       else if (c.passado) E('O prazo para ' + pz.rotulo + ' (' + c.data + ') já passou.', pz.passo);
       else if (c.alem && !texto(valorCampo(resp, pz.campo + '_justificativa'))) E('Prazo para ' + pz.rotulo + ' além de 7 dias úteis (limite ' + c.limite + ') sem justificativa.', pz.passo);
     });
+    var dcx = {}; lista(d.dados_cliente).forEach(function (x) { dcx[x.campo] = texto(x.status === 'corrigir' ? x.correcao : x.valor); });
+    if ('rt' in dcx && !dcx.rt) A('Falta o responsável técnico (nome e CRM): é obrigatório na página de saúde. Combine o envio no grupo.', 'confirmacoes');
+    if ('razao_social' in dcx && (!dcx.razao_social || !dcx.cnpj || !dcx.email_privacidade)) A('Faltam dados da empresa para a política de privacidade (razão social, CNPJ e e-mail).', 'confirmacoes');
+    if (dcx.cnpj && String(dcx.cnpj).replace(/\D/g, '').length !== 14) A('O CNPJ está incompleto: são 14 números.', 'confirmacoes');
+    if (dcx.email_privacidade && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(dcx.email_privacidade)) A('O e-mail para pedidos de privacidade parece inválido.', 'confirmacoes');
     var wa = lista(d.dados_cliente).filter(function (x) { return x.campo === 'whatsapp' && x.valor; })[0];
     if (wa && String(wa.valor).replace(/\D/g, '').length !== 11) A('O WhatsApp que recebe os contatos está incompleto: use DDD e os 9 dígitos.', 'confirmacoes');
     var rec = texto(d.pagina_principal_recomendada);
@@ -1705,7 +1736,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var principal = texto(d.pagina_principal);
     var cards = [
       card('Verba mensal no Google', moeda(vb.mensal), (vb.paginas === 1 ? '1 página e campanha' : vb.paginas + ' páginas e campanhas') + ' · cerca de ' + moeda(vb.por_pagina_dia) + ' por dia em cada'),
-      card('Página principal', esc(principal || 'a definir'), m.lp_modelo ? '<a href="' + esc(m.lp_modelo) + '" target="_blank" rel="noopener">Ver o modelo da página</a>' : ''),
+      card('Página principal', esc(principal || 'a definir'), (d.base_banner ? 'Banner: base ' + d.base_banner.n + ' · ' + esc(d.base_banner.nome) + (m.lp_modelo ? ' · ' : '') : '') + (m.lp_modelo ? '<a href="' + esc(m.lp_modelo) + '" target="_blank" rel="noopener">Ver o modelo da página</a>' : '')),
       card('Domínio da página', esc(d.dominio && d.dominio.modo === 'escolhido' ? d.dominio.escolhido : d.dominio && d.dominio.modo === 'whatsapp' ? 'Aprovação no grupo' : 'a definir'), d.dominio && d.dominio.modo === 'whatsapp' ? esc('Sugestões: ' + lista(d.dominio.sugestoes).map(function (x) { return x.dominio; }).join(' · ')) : ''),
       card(vocab.Servicos + ' para anunciar', String(d.servicos.length), esc(d.servicos.join(' · '))),
       card('Convênios', esc(simNao[d.convenios.situacao] || 'sem resposta'), d.convenios.pedir_lista ? 'Lista completa será pedida no grupo do WhatsApp' : esc(d.convenios.observacao)),
@@ -1747,7 +1778,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   raiz.OnboardingW7 = {
     ROTEIRO: ROTEIRO, MAPA_SCHEMA: MAPA_SCHEMA, MAPA_VERSAO: MAPA_VERSAO, RESPOSTAS_SCHEMA: RESPOSTAS_SCHEMA,
     slidesPara: slidesPara, estadoInicial: estadoInicial, migrar: migrar, sugerirDominios: sugerirDominios, normalizarDominio: normalizarDominio,
-    PRAZO_DIAS_UTEIS: PRAZO_DIAS_UTEIS, somarDiasUteis: somarDiasUteis, lerData: lerData, checarPrazo: checarPrazo, dataBase: dataBase, formatarData: formatarData, mascaraTelefone: mascaraTelefone, mascaraData: mascaraData, PRAZOS: PRAZOS, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
+    PRAZO_DIAS_UTEIS: PRAZO_DIAS_UTEIS, somarDiasUteis: somarDiasUteis, lerData: lerData, checarPrazo: checarPrazo, dataBase: dataBase, formatarData: formatarData, mascaraTelefone: mascaraTelefone, mascaraData: mascaraData, mascaraCnpj: mascaraCnpj, BASES_BANNER: BASES_BANNER, PRAZOS: PRAZOS, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
     montarMapa: montarMapa, validarMapa: validarMapa, gerarMapaHtml: gerarMapaHtml, pendenciasDe: pendenciasDe, txt: txt
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
@@ -1807,6 +1838,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if (c.alem) return '<p class="dk-alerta">Além de 7 dias úteis (limite ' + c.limite + '). Escreva o motivo:</p><label class="dk-campo dk-just"><span class="sr">Justificativa do prazo</span><textarea rows="2" data-campo="' + campo + '_justificativa" placeholder="Por que o prazo maior">' + esc(obter(campo + '_justificativa') || '') + '</textarea></label>';
     return '<p class="dk-ok">' + c.data + ', dentro dos 7 dias úteis.</p>';
   }
+  function entradaCnpj(campo, valor) { return '<label class="dk-campo"><input type="text" inputmode="numeric" data-campo="' + campo + '" data-mascara="cnpj" value="' + esc(valor || '') + '" placeholder="00.000.000/0000-00" maxlength="18" autocomplete="off"></label>'; }
   function entradaTel(campo, rotulo, valor) { return '<label class="dk-campo">' + esc(rotulo) + '<input type="tel" inputmode="tel" data-campo="' + campo + '" data-mascara="tel" value="' + esc(valor || '') + '" placeholder="(DDD) 99999-9999" maxlength="15" autocomplete="off"></label>'; }
   function marcar(campo, rotulo, valor) { return '<label class="dk-check' + (valor ? ' marcado' : '') + '"><input type="checkbox" data-campo="' + campo + '"' + (valor ? ' checked' : '') + '>' + esc(rotulo) + '</label>'; }
   function cabec(s) { return '<div class="dk-rot">' + (s.numero ? '<span class="num">Pergunta ' + s.numero + '</span>' : '') + esc(rotuloTipo(s)) + '</div><h2>' + esc(s.titulo) + '</h2>'; }
@@ -1891,6 +1923,11 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       '<div class="dk-linha"><label class="dk-campo">Outro domínio<input type="text" id="dk-novo-dominio" placeholder="ex.: ' + esc(((dm.sugestoes || [])[0] || {}).dominio || 'nomedaclinica.com.br') + '" autocomplete="off" spellcheck="false"></label><button type="button" class="dk-btn" data-acao="add-dominio">Incluir</button></div>' +
       (dm.modo === 'whatsapp' ? '<p class="dk-ajuda">A Win7 manda estas sugestões no grupo; a página vai ao ar quando ' + vocab().a_empresa + ' aprovar uma.</p>' : '') + '</div>';
   }
+  /** Botões do fundo do banner (1 Órbitas, 2 Ondas, 3 Varredura): trocam o modelo ao vivo. */
+  function basesHtml() {
+    var nb = st.r.lp_base || 1;
+    return '<div class="dk-bases" role="group" aria-label="Fundo do banner"><span>Fundo do banner</span>' + [1, 2, 3].map(function (n) { return '<button type="button" data-acao="base" data-n="' + n + '" aria-pressed="' + (nb === n) + '">' + n + ' · ' + esc(O.BASES_BANNER[n]) + '</button>'; }).join('') + '</div>';
+  }
   R.pagina = function (s) {
     var u = M.urlModelo(st.diag), v = vocab(), c = st.diag.cliente || {}, ip = iPrincipal(), sv = st.r.servicos[ip] || { nome: v.servico, confirmado: false };
     var conv = v.setor === 'saude' ? 'convênios' : 'parceiros';
@@ -1900,8 +1937,9 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       '<div class="dk-cartao dk-sec"><h3>O que vem ' + v.da_empresa + '</h3><ul class="dk-lista op"><li>Vídeo de apresentação (ou roteiro, ou IA)</li><li>Lista de ' + (v.setor === 'saude' ? 'convênios' : 'parceiros e formas de pagamento') + '</li><li>Depoimentos em vídeo</li></ul></div>' +
       cartaoDominio() +
       '<div class="dk-gerado"><button type="button" class="dk-btn' + (sv.confirmado ? '' : ' primario') + ' dk-grande" data-acao="confirmar-principal" aria-pressed="' + !!sv.confirmado + '">' + (sv.confirmado ? 'Página principal confirmada' : 'Confirmar como página principal') + '</button>' +
-      (u ? '<a class="dk-btn dk-grande" href="' + esc(u) + '" target="_blank" rel="noopener">Abrir o modelo em tela cheia</a>' : '') + '</div>';
-    var direita = u ? '<div class="dk-celular"><iframe src="' + esc(u) + '" title="Modelo da página de ' + esc(sv.nome) + '" loading="lazy"></iframe></div><p class="dk-legenda">Modelo para aprovação: vídeo, ' + conv + ' e depoimentos são exemplos.</p>' : '';
+      (u ? '<a class="dk-btn dk-grande" data-modelo-link href="' + esc(u + '#base' + (st.r.lp_base || 1)) + '" target="_blank" rel="noopener">Abrir o modelo em tela cheia</a>' : '') + '</div>' + (u ? '<div class="dk-bases-cel">' + basesHtml() + '</div>' : '');
+    var nb = st.r.lp_base || 1, bases = u ? basesHtml() : '';
+    var direita = u ? '<div class="dk-celular"><iframe src="' + esc(u + '#base' + nb) + '" title="Modelo da página de ' + esc(sv.nome) + '" loading="lazy"></iframe></div>' + bases + '<p class="dk-legenda">Modelo para aprovação: vídeo, ' + conv + ' e depoimentos são exemplos.</p>' : '';
     return cabec(s) + '<div class="dk-recomenda' + (u ? '' : ' sem-modelo') + '"><div>' + esquerda + '</div>' + (direita ? '<div class="dk-recomenda-modelo">' + direita + '</div>' : '') + '</div>';
   };
   function cartaoGmn() {
@@ -2028,7 +2066,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   R.confirmacoes = function (s) {
     var c = st.r.confirmacoes, v = vocab(), dc = st.r.dados_cliente || [];
     var dados = dc.length ? '<div class="dk-cartao"><h3>Dados ' + v.da_empresa + ' na página e no Google</h3>' + dc.map(function (x, i) {
-      return '<div class="dk-dado"><div><div class="rot">' + esc(x.rotulo) + '</div>' + (x.editavel ? (/telefone|whatsapp/.test(x.campo) ? entradaTel('dados_cliente.' + i + '.valor', '', x.valor) : entrada('dados_cliente.' + i + '.valor', '', x.valor, 'preencher')) : '<div class="val">' + esc(x.valor || 'não informado') + '</div>') + '</div>' +
+      return '<div class="dk-dado"><div><div class="rot">' + esc(x.rotulo) + '</div>' + (x.editavel ? (/telefone|whatsapp/.test(x.campo) ? entradaTel('dados_cliente.' + i + '.valor', '', x.valor) : x.campo === 'cnpj' ? entradaCnpj('dados_cliente.' + i + '.valor', x.valor) : entrada('dados_cliente.' + i + '.valor', '', x.valor, ({ rt: 'Dr(a). Nome · CRM/UF 00000', razao_social: 'nome empresarial, como no CNPJ', email_privacidade: 'contato@empresa.com.br' })[x.campo] || 'preencher')) : '<div class="val">' + esc(x.valor || 'não informado') + '</div>') + '</div>' +
         seg('dados_cliente.' + i + '.status', [['ok', 'Confirmado'], ['corrigir', 'Corrigir']], x.status) +
         (x.status === 'corrigir' ? '<div class="corr">' + (/telefone|whatsapp/.test(x.campo) ? entradaTel('dados_cliente.' + i + '.correcao', 'Como fica', x.correcao) : entrada('dados_cliente.' + i + '.correcao', 'Como fica', x.correcao, '')) + '</div>' : '') + '</div>';
     }).join('') + '</div>' : '';
@@ -2184,6 +2222,13 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       if (era && era.principal && st.r.servicos.length) st.r.servicos[0].principal = true;
       salvar(); desenhar(true); toast((era ? era.nome : 'O item') + ' saiu da lista.');
     }
+    else if (acao === 'base') {
+      st.r.lp_base = +a.dataset.n; salvar();
+      var fr = st.el.querySelector('.dk-celular iframe'), um = M.urlModelo(st.diag);
+      if (fr && um) fr.src = um + '#base' + st.r.lp_base;
+      var lk = st.el.querySelector('[data-modelo-link]'); if (lk && um) lk.href = um + '#base' + st.r.lp_base;
+      st.el.querySelectorAll('[data-acao="base"]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.n === st.r.lp_base)); });
+    }
     else if (acao === 'escolher-dominio') { st.r.dominio = st.r.dominio || { sugestoes: [] }; var dd = a.dataset.d; var ja = st.r.dominio.modo === 'escolhido' && st.r.dominio.escolhido === dd; st.r.dominio.modo = ja ? null : 'escolhido'; st.r.dominio.escolhido = ja ? '' : dd; salvar(); desenhar(true); }
     else if (acao === 'add-dominio') {
       var ent = st.el.querySelector('#dk-novo-dominio'), nd = O.normalizarDominio(ent.value);
@@ -2211,6 +2256,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var t = e.target; if (!t.dataset || !t.dataset.campo || t.type === 'checkbox') return;
     if (t.dataset.mascara === 'tel') t.value = O.mascaraTelefone(t.value);
     if (t.dataset.mascara === 'data') t.value = O.mascaraData(t.value);
+    if (t.dataset.mascara === 'cnpj') t.value = O.mascaraCnpj(t.value);
     definir(t.dataset.campo, t.value);
     if (t.dataset.mascara === 'data') { var w = t.closest('[data-wrap]'); if (w) w.querySelector('.dk-data-info').innerHTML = infoData(t.dataset.campo); }
     if (st.ajuste) painelAjuste();
