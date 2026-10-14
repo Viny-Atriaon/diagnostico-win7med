@@ -215,7 +215,7 @@ Regras:
 
 **Verba** (opcional): a verba final é decidida na reunião. Regra da Win7, que a apresentação aplica: cerca de **R$ 1.500 por mês (R$ 50 por dia) para cada página e campanha, até 3**. Ex.: R$ 3.000 por mês = 2 páginas com os 2 serviços principais. Se a equipe já tiver sugestão por campanha, registre em `verba.frentes`: a soma vira o ponto de partida na reunião. O Gerador soma e escreve "pago direto ao Google". **Projeção** (opcional): só com verba e ticket; cenários com `custo_contato` e `conversao` marcados como `estimado`, com fonte. **Agenda vazia** (opcional): só com horários vazios e ticket informados. O Gerador faz todas as contas.
 
-**Perguntas para a reunião** (`perguntas_reuniao`, até 8): o que a empresa precisa confirmar ou entregar para as campanhas irem ao ar e que **a apresentação ainda não pergunta**. Exemplos: conta do Google Ads e administrador, quem responde o WhatsApp, horário de corte para encaixe, conflitos de dados. Não repita verba, diferenciais, convênios, cidades, depoimentos nem vídeo.
+**Perguntas para a reunião** (`perguntas_reuniao`, até 8): o que a empresa precisa confirmar ou entregar para as campanhas irem ao ar e que **a apresentação ainda não pergunta**. Exemplos: conta do Google Ads e administrador, convênio que mais traz pacientes (em saúde), conflitos de dados. Não repita verba, diferenciais, convênios, cidades, depoimentos, vídeo nem os dados que a apresentação já confere (nome, endereço, telefone, WhatsApp que recebe os contatos, horário e site). Nada de pergunta operacional da agenda, como horário de corte para encaixe.
 
 **Conclusão**: um título curto e uma ou duas frases. Sem nome de pessoa e sem contato.
 
@@ -378,7 +378,7 @@ O modelo abaixo é de saúde. **Em outro segmento**, use `"setor": "geral"`, tro
     "cenarios": [ { "nome": "Realista", "custo_contato": { "valor": 8, "fonte": "referência da base Win7", "status": "estimado" }, "conversao": { "valor": 0.2, "fonte": "referência da base Win7", "status": "estimado" } } ],
     "nota": "Frase curta."
   },
-  "perguntas_reuniao": ["A empresa já tem conta do Google Ads? Quem é o administrador?", "Quem recebe e responde os contatos do WhatsApp?"],
+  "perguntas_reuniao": ["A empresa já tem conta do Google Ads? Quem é o administrador?", "Qual convênio traz mais pacientes?"],
   "conclusao": { "titulo": "Frase curta de fechamento do diagnóstico.", "texto": "Uma ou duas frases sobre o próximo passo." },
   "pendencias": ["o que ficou sem dado, para a equipe (até 10 itens de uma linha)"]
 }
