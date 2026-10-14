@@ -496,6 +496,11 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 .dk-bases-cel { display: none; }
 @media (max-width: 560px) { .dk-bases-cel { display: block; margin-top: 4px; } }
 
+/* Ativação do robô 3 no resumo */
+.dk-robo3 { margin-top: 18px; }
+.dk-copia { position: fixed; left: 16px; right: 16px; bottom: 90px; z-index: 90; height: 150px; font: inherit; font-size: 13px; padding: 10px; border-radius: 10px; border: 2px solid var(--petroleo); background: #fff; }
+
+
 </style>
 </head>
 <body>
@@ -550,6 +555,18 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
           <button type="button" id="remover-logo" hidden>Remover</button>
         </div>
         <div class="miniatura" id="mini-logo" hidden><img alt="Logo do cliente escolhida"><span></span></div>
+      </div>
+    </section>
+
+    <section class="cartao passo" aria-labelledby="t4">
+      <span class="n">4</span>
+      <div>
+        <h2 id="t4">Depois da reunião: robô 3</h2>
+        <p>Copie a ativação e cole numa conversa nova do Claude Code, aberta no Cérebro. O robô 3 lê a pasta do cliente (diagnóstico, mapeamento da reunião, transcrição e logo) e entrega a ficha, a copy, o roteiro, o Google Ads e as páginas.</p>
+        <div class="acoes">
+          <button type="button" id="copiar-robo3">Copiar ativação do robô 3</button>
+        </div>
+        <p class="msg" id="msg-robo3" role="status"></p>
       </div>
     </section>
 
@@ -1560,6 +1577,20 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   }
 
   /** Rascunho salvo numa versão anterior do roteiro: completa os campos novos sem perder as respostas. */
+  /** Mensagem que liga o robô 3 numa conversa nova do Claude Code (como a ativação do robô 1 no Gerador). */
+  var REPO_CEREBRO = 'https://github.com/Viny-Atriaon/cerebro-win7med';
+  function ativacaoRobo3(nome, slug_) {
+    var s = texto(slug_), pasta = s ? 'clientes/' + s : '[cole aqui o caminho da pasta do cliente]';
+    return [
+      'Ative o Robô 3 do Cérebro Win7 Med e comece agora, sem me perguntar o que fazer.',
+      'Repositório: ' + REPO_CEREBRO + ' (privado). Trabalhe dentro dele; normalmente fica em Documents\\Claude\\cerebro-win7med.',
+      'Leia AGENTS.md e ESTADO.md e siga .claude/skills/robo3/SKILL.md e agente/AGENTE-EXECUCAO-WIN7MED.md.',
+      (texto(nome) ? 'Cliente: ' + texto(nome) + '. ' : '') + 'Pasta do cliente: ' + pasta + '.',
+      'O mapeamento da reunião (mapa-onboarding-' + (s || '<cliente>') + '.json) pode estar em Downloads: traga para a pasta. Se a transcrição da reunião não estiver na pasta, peça para mim.',
+      'Rode a etapa "ler" e pare no ponto de controle 1, com a ficha do cliente para eu aprovar.'
+    ].join('\n');
+  }
+
   /** Campos que a página real precisa (ADR-007): RT na saúde e os dados da empresa para a política de privacidade. */
   function camposEmpresa(saude) {
     return (saude ? [['rt', 'Responsável técnico (nome e CRM)', '']] : []).concat([['razao_social', 'Razão social (vai na política de privacidade)', ''], ['cnpj', 'CNPJ', ''], ['email_privacidade', 'E-mail para pedidos sobre dados pessoais', '']]);
@@ -1778,7 +1809,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   raiz.OnboardingW7 = {
     ROTEIRO: ROTEIRO, MAPA_SCHEMA: MAPA_SCHEMA, MAPA_VERSAO: MAPA_VERSAO, RESPOSTAS_SCHEMA: RESPOSTAS_SCHEMA,
     slidesPara: slidesPara, estadoInicial: estadoInicial, migrar: migrar, sugerirDominios: sugerirDominios, normalizarDominio: normalizarDominio,
-    PRAZO_DIAS_UTEIS: PRAZO_DIAS_UTEIS, somarDiasUteis: somarDiasUteis, lerData: lerData, checarPrazo: checarPrazo, dataBase: dataBase, formatarData: formatarData, mascaraTelefone: mascaraTelefone, mascaraData: mascaraData, mascaraCnpj: mascaraCnpj, BASES_BANNER: BASES_BANNER, PRAZOS: PRAZOS, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
+    PRAZO_DIAS_UTEIS: PRAZO_DIAS_UTEIS, somarDiasUteis: somarDiasUteis, lerData: lerData, checarPrazo: checarPrazo, dataBase: dataBase, formatarData: formatarData, mascaraTelefone: mascaraTelefone, mascaraData: mascaraData, mascaraCnpj: mascaraCnpj, BASES_BANNER: BASES_BANNER, REPO_CEREBRO: REPO_CEREBRO, ativacaoRobo3: ativacaoRobo3, PRAZOS: PRAZOS, verbaMensal: verbaMensal, calcularVerba: calcularVerba,
     montarMapa: montarMapa, validarMapa: validarMapa, gerarMapaHtml: gerarMapaHtml, pendenciasDe: pendenciasDe, txt: txt
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
@@ -1819,6 +1850,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
   }
   function toast(t) {
+    st.el.querySelectorAll('.dk-toast').forEach(function (x) { x.remove(); });
     var el = document.createElement('div'); el.className = 'dk-toast'; el.setAttribute('role', 'status'); el.textContent = t; st.el.appendChild(el);
     setTimeout(function () { el.remove(); }, 3200);
   }
@@ -1922,6 +1954,16 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       (function () { var conf = (dm.sugestoes || []).filter(function (x) { return rot[x.status] && x.conferido_em; })[0]; return conf ? '<p class="dk-dica">Livre ou registrado: conferido no Registro.br em ' + esc(conf.conferido_em.split('-').reverse().join('/')) + '. Sugestivo: ainda não conferido.</p>' : '<p class="dk-dica">Sugestivo: ainda não conferido no Registro.br. Use "Conferir" antes de decidir.</p>'; })() +
       '<div class="dk-linha"><label class="dk-campo">Outro domínio<input type="text" id="dk-novo-dominio" placeholder="ex.: ' + esc(((dm.sugestoes || [])[0] || {}).dominio || 'nomedaclinica.com.br') + '" autocomplete="off" spellcheck="false"></label><button type="button" class="dk-btn" data-acao="add-dominio">Incluir</button></div>' +
       (dm.modo === 'whatsapp' ? '<p class="dk-ajuda">A Win7 manda estas sugestões no grupo; a página vai ao ar quando ' + vocab().a_empresa + ' aprovar uma.</p>' : '') + '</div>';
+  }
+  /** Copia para a área de transferência; se o navegador recusar, mostra o texto selecionado para copiar à mão. */
+  function copiarTexto(t, aviso) {
+    function manual() {
+      var caixa = document.createElement('textarea'); caixa.value = t; caixa.setAttribute('readonly', ''); caixa.className = 'dk-copia';
+      st.el.appendChild(caixa); caixa.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      if (ok) { caixa.remove(); toast(aviso); } else { toast('Selecione o texto e copie (Ctrl+C).'); setTimeout(function () { caixa.remove(); }, 20000); }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { toast(aviso); }, manual); else manual();
   }
   /** Botões do fundo do banner (1 Órbitas, 2 Ondas, 3 Varredura): trocam o modelo ao vivo. */
   function basesHtml() {
@@ -2098,6 +2140,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     return cabec(s) + '<div class="dk-cards">' + cards + '</div>' + lista('erros', 'erro') + lista('avisos', 'aviso') + guia +
       '<div class="dk-gerado"><button type="button" class="dk-btn primario dk-grande" data-acao="gerar-mapa"' + (val.erros.length ? ' disabled' : '') + '>Gerar mapeamento em PDF</button>' +
       (st.mapa ? '<button type="button" class="dk-btn" data-acao="imprimir">PDF de novo</button><button type="button" class="dk-btn" data-acao="abrir-mapa">Abrir o Mapa</button><button type="button" class="dk-btn" data-acao="baixar-mapa">Baixar Mapa (HTML)</button><button type="button" class="dk-btn" data-acao="baixar-json">Baixar dados (JSON)</button>' : '') + '</div>' +
+      (st.mapa ? '<div class="dk-cartao dk-robo3"><h3>Depois da reunião: robô 3</h3><p class="dk-ajuda">Copia a mensagem que liga o robô 3 numa conversa nova do Claude Code e baixa o mapeamento (JSON). Junte a transcrição da reunião na pasta do cliente.</p><div class="dk-gerado"><button type="button" class="dk-btn primario" data-acao="ativar-robo3">Copiar ativação do robô 3</button></div></div>' : '') +
       '<div class="dk-gerado" style="margin-top:22px"><button type="button" class="dk-btn" data-acao="exportar">Exportar rascunho</button><label class="dk-btn" style="position:relative;overflow:hidden">Importar rascunho<input type="file" accept=".json,application/json" data-acao="importar" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button type="button" class="dk-btn" data-acao="apagar">Apagar deste aparelho</button></div>';
   };
 
@@ -2244,6 +2287,10 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     else if (acao === 'confirmar-principal') { var ip = iPrincipal(); if (st.r.servicos[ip]) { st.r.servicos[ip].confirmado = !st.r.servicos[ip].confirmado; salvar(); desenhar(true); } }
     else if (acao === 'abrir-mapa' && st.mapa) window.open(URL.createObjectURL(new Blob([st.mapa.html], { type: 'text/html;charset=utf-8' })), '_blank', 'noopener');
     else if (acao === 'baixar-mapa' && st.mapa) baixar('mapa-onboarding-' + st.r.cliente.slug + '.html', st.mapa.html, 'text/html;charset=utf-8');
+    else if (acao === 'ativar-robo3' && st.mapa) {
+      if (!st.jsonBaixado) { baixar('mapa-onboarding-' + st.r.cliente.slug + '.json', JSON.stringify(st.mapa.dados, null, 2), 'application/json'); st.jsonBaixado = true; }
+      copiarTexto(O.ativacaoRobo3(st.r.cliente.nome, st.r.cliente.slug), 'Ativação copiada. Cole numa conversa nova do Claude Code.');
+    }
     else if (acao === 'baixar-json' && st.mapa) baixar('mapa-onboarding-' + st.r.cliente.slug + '.json', JSON.stringify(st.mapa.dados, null, 2), 'application/json');
     else if (acao === 'exportar') baixar('rascunho-onboarding-' + st.r.cliente.slug + '.json', JSON.stringify({ diagnostico: st.diag, respostas: st.r }, null, 2), 'application/json');
     else if (acao === 'apagar') {
@@ -2418,6 +2465,14 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var ok = function () { msg('msg-ativacao', 'Mensagem copiada. Cole na conversa com a IA e envie.', 'ok'); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, function () { msg('msg-ativacao', texto, ''); });
     else msg('msg-ativacao', texto, '');
+  });
+
+  $('copiar-robo3').addEventListener('click', function () {
+    var c = (estado.dados && estado.dados.cliente) || {}, nome = c.nome || '', slug = nome ? M.slug(nome) : '';
+    var texto = window.OnboardingW7 ? window.OnboardingW7.ativacaoRobo3(nome, slug) : '';
+    var ok = function () { msg('msg-robo3', 'Ativação copiada' + (nome ? ' para ' + nome : '') + '. Cole numa conversa nova do Claude Code.', 'ok'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, function () { msg('msg-robo3', texto, ''); });
+    else msg('msg-robo3', texto, '');
   });
 
   // a ferramenta abre já mostrando um diagnóstico de exemplo (ou o último rascunho desta aba)
