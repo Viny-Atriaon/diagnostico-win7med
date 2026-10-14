@@ -584,6 +584,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
           <div class="acoes">
             <button type="button" class="primario" id="apresentar">Apresentar no onboarding</button>
             <button type="button" id="baixar">Baixar diagnóstico (HTML)</button>
+            <button type="button" id="baixar-json">Baixar dados (JSON)</button>
             <button type="button" id="nova-aba">Abrir em nova aba</button>
             <button type="button" id="imprimir">Imprimir ou salvar PDF</button>
           </div>
@@ -1275,6 +1276,16 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
    * Monta o laudo. opcoes = { css, ativos: {logo, logoNegativo, fonte400, fonte700}, logoCliente, data }
    * Retorna { html, placar, validacao, travessoes_corrigidos }.
    */
+  /** Texto em base64 (UTF-8), no navegador e no Node: carrega dados dentro de um comentário HTML sem quebrar a página. */
+  function base64Utf8(t) {
+    if (typeof Buffer !== 'undefined') return Buffer.from(String(t), 'utf8').toString('base64');
+    return btoa(unescape(encodeURIComponent(String(t))));
+  }
+  /** Dados do diagnóstico que o robô 3 usa, embutidos no HTML: assim o arquivo baixado já serve de entrada (ADR-007). Nada da conversa comercial. */
+  function dadosParaRobo3(d) {
+    return { schema: 'w7-diagnostico-dados', versao_dados: d.versao_dados, cliente: d.cliente, lp_modelo: d.lp_modelo || null, termos: d.termos || null, raio: d.raio || null, verba: d.verba || null, restricoes: d.restricoes || null };
+  }
+
   function gerarLaudo(dadosBrutos, opcoes) {
     opcoes = opcoes || {};
     var n = normalizar(dadosBrutos);
@@ -1300,7 +1311,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="robots" content="noindex, nofollow">\n' +
       '<meta name="w7-motor" content="' + VERSAO + '">\n<meta name="w7-cores-vetadas" content="' + esc(ctx.vetadas.join(',')) + '">\n' +
       '<title>Diagnóstico para Google Ads · ' + esc(d.cliente.nome) + ' · ' + ctx.vocab.marca + '</title>\n' +
-      '<\!-- Fonte Outfit, Copyright 2021 The Outfit Project Authors, SIL Open Font License 1.1 -->\n<style>\n' + css + '\n</style>\n</head>\n<body>\n' + corpoFinal + '\n</body>\n</html>\n';
+      '<\!-- Fonte Outfit, Copyright 2021 The Outfit Project Authors, SIL Open Font License 1.1 -->\n<style>\n' + css + '\n</style>\n</head>\n<body>\n' + corpoFinal + '\n<\!-- w7-dados diagnostico ' + base64Utf8(JSON.stringify(dadosParaRobo3(d))) + ' -->\n</body>\n</html>\n';
     var v2 = validarHtml(html);
     validacao.ok = v2.ok;
     validacao.erros = validacao.erros.concat(v2.erros);
@@ -1344,7 +1355,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     VERSAO: VERSAO, PILARES: PILARES, ORDEM_PILARES: ORDEM_PILARES,
     extrairJson: extrairJson, normalizar: normalizar, validarDados: validarDados, pontuar: pontuar,
     avaliacoesParaNota: avaliacoesParaNota, alvosNota: alvosNota, projetar: projetar,
-    familiaDeCor: familiaDeCor, trocarCores: trocarCores, gerarLaudo: gerarLaudo, validarHtml: validarHtml, slug: slug,
+    familiaDeCor: familiaDeCor, trocarCores: trocarCores, base64Utf8: base64Utf8, gerarLaudo: gerarLaudo, validarHtml: validarHtml, slug: slug,
     VOCAB: VOCAB, urlModelo: urlModelo, svgRaio: svgRaio, chaveCidade: chaveCidade, vocabDe: vocabDe, comVocab: comVocab, itensDo: itensDo, regraVerba: regraVerba, verbaDiariaParaMensal: verbaDiariaParaMensal,
     VERBA_MINIMA_POR_PAGINA: VERBA_MINIMA_POR_PAGINA, MAX_PAGINAS: MAX_PAGINAS, esc: esc, md: md, moeda: moeda, decimal: decimal, inteiro: inteiro, ecg: ecg, faixa: faixa, fontesCss: fontesCss, pontuarPilar: pontuarPilar
   };
@@ -1800,7 +1811,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       '<div class="fechamento">' + M.faixa(vetadas) + '<div class="fech-corpo"><img src="' + logoNeg + '" alt="' + vocab.marca_logo + '" style="height:54px;width:auto">' + M.ecg() + '<h2>Tudo combinado. Próximo passo: páginas e campanhas.</h2><p>Este mapa é a referência do onboarding junto com a transcrição da reunião.</p></div></div>' +
       '<p class="rodape">Mapa gerado pelo <b>Motor de Diagnóstico ' + vocab.marca + '</b> v' + M.VERSAO + ' em ' + esc(opcoes.data || hojeBr()) + ', a partir do diagnóstico e das respostas registradas na reunião.</p></main>';
     var css = M.trocarCores(M.fontesCss(ativos) + (opcoes.css || ''), vetadas);
-    var html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="robots" content="noindex, nofollow">\n<meta name="w7-mapa" content="' + MAPA_VERSAO + '">\n<title>Mapa do Onboarding · ' + esc(m.cliente.nome) + ' · ' + vocab.marca + '</title>\n<\!-- Fonte Outfit, Copyright 2021 The Outfit Project Authors, SIL Open Font License 1.1 -->\n<style>\n' + css + '\n</style>\n</head>\n<body class="mapa-doc">\n' + M.trocarCores(corpo, vetadas) + '\n</body>\n</html>\n';
+    var html = '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<meta name="robots" content="noindex, nofollow">\n<meta name="w7-mapa" content="' + MAPA_VERSAO + '">\n<title>Mapa do Onboarding · ' + esc(m.cliente.nome) + ' · ' + vocab.marca + '</title>\n<\!-- Fonte Outfit, Copyright 2021 The Outfit Project Authors, SIL Open Font License 1.1 -->\n<style>\n' + css + '\n</style>\n</head>\n<body class="mapa-doc">\n' + M.trocarCores(corpo, vetadas) + '\n<\!-- w7-dados mapa ' + M.base64Utf8(JSON.stringify(m)) + ' -->\n</body>\n</html>\n';
     return html;
   }
 
@@ -2137,7 +2148,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     var guia = val.pontos.some(function (p) { return p.passo; }) ? '<div class="dk-gerado"><button type="button" class="dk-btn" data-acao="comecar-ajuste">Ajustar ponto a ponto (' + val.pontos.filter(function (p) { return p.passo; }).length + ')</button></div>' : '';
     return cabec(s) + '<div class="dk-cards">' + cards + '</div>' + lista('erros', 'erro') + lista('avisos', 'aviso') + guia +
       '<div class="dk-gerado"><button type="button" class="dk-btn primario dk-grande" data-acao="gerar-mapa"' + (val.erros.length ? ' disabled' : '') + '>Gerar mapeamento em PDF</button>' +
-      (st.mapa ? '<button type="button" class="dk-btn" data-acao="imprimir">PDF de novo</button><button type="button" class="dk-btn" data-acao="abrir-mapa">Abrir o Mapa</button><button type="button" class="dk-btn" data-acao="baixar-mapa">Baixar Mapa (HTML)</button><button type="button" class="dk-btn" data-acao="baixar-json">Baixar dados (JSON)</button>' : '') + '</div>' +
+      (st.mapa ? '<button type="button" class="dk-btn" data-acao="imprimir">PDF de novo</button><button type="button" class="dk-btn" data-acao="abrir-mapa">Abrir o Mapa</button><button type="button" class="dk-btn" data-acao="baixar-mapa">Baixar Mapa (HTML)</button><button type="button" class="dk-btn" data-acao="baixar-json">Baixar dados para o robô 3 (JSON)</button>' : '') + '</div>' +
       (st.mapa ? '<div class="dk-cartao dk-robo3"><h3>Depois da reunião: robô 3</h3><p class="dk-ajuda">Baixa o mapeamento (JSON) e copia o comando inicial do robô 3. Coloque o mapeamento e a transcrição na pasta do cliente; o robô pede o endereço da pasta.</p><div class="dk-gerado"><button type="button" class="dk-btn primario" data-acao="ativar-robo3">Copiar comando do robô 3</button></div></div>' : '') +
       '<div class="dk-gerado" style="margin-top:22px"><button type="button" class="dk-btn" data-acao="exportar">Exportar rascunho</button><label class="dk-btn" style="position:relative;overflow:hidden">Importar rascunho<input type="file" accept=".json,application/json" data-acao="importar" style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button type="button" class="dk-btn" data-acao="apagar">Apagar deste aparelho</button></div>';
   };
@@ -2338,7 +2349,9 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     st.mapa = { dados: dados, html: html };
     desenhar(true);
     imprimir();
-    toast('Mapeamento gerado: escolha "Salvar como PDF". Baixe também os dados (JSON) para o próximo passo.');
+    // o JSON vai junto: o robô 3 lê qualquer formato, mas com os dados a ficha já sai preenchida
+    baixar('mapa-onboarding-' + st.r.cliente.slug + '.json', JSON.stringify(dados, null, 2), 'application/json'); st.jsonBaixado = true;
+    toast('Mapeamento gerado: escolha "Salvar como PDF". Os dados (JSON) para o robô 3 já foram baixados.');
   }
   /** Imprime o Mapa num quadro escondido: no navegador, "Salvar como PDF" gera o arquivo. */
   function imprimir() {
@@ -2452,6 +2465,13 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   $('baixar').addEventListener('click', function () {
     var a = document.createElement('a'); a.href = blobUrl(); a.download = estado.nomeArquivo; document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  });
+  $('baixar-json').addEventListener('click', function () {
+    if (!estado.dados) return;
+    var nome = 'diagnostico-' + (M.slug((estado.dados.cliente || {}).nome) || 'cliente') + '.json';
+    var url = URL.createObjectURL(new Blob([JSON.stringify(estado.dados, null, 2)], { type: 'application/json' }));
+    var a = document.createElement('a'); a.href = url; a.download = nome; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500);
   });
   $('apresentar').addEventListener('click', function () { if (estado.dados && window.OnboardingDeck) window.OnboardingDeck.abrir(estado.dados, { ativos: W7.ativos, cssLaudo: W7.cssLaudo, logoCliente: estado.logoCliente }); });
   $('nova-aba').addEventListener('click', function () { window.open(blobUrl(), '_blank', 'noopener'); });
