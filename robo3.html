@@ -28,8 +28,11 @@ button:hover{background:var(--fundo-escuro)}
 .msg{margin-top:8px;font-weight:600;color:var(--ok);min-height:1.5em}
 pre{white-space:pre-wrap;font-family:inherit;font-size:.95rem;background:var(--fundo);border:1px dashed var(--linha);border-radius:12px;padding:12px 14px;margin-top:12px;color:var(--tinta);overflow-wrap:anywhere}
 footer{width:min(860px,100% - 32px);margin-inline:auto;padding-bottom:28px;color:var(--apagado);font-size:.85rem}
+.embutido .faixa,.embutido header,.embutido footer{display:none}
+.embutido main{padding-top:24px}
 @media (max-width:560px){.cartao{grid-template-columns:1fr}.n{grid-row:auto}header .in{flex-wrap:wrap}}
 </style>
+<script>if (window.self !== window.top) document.documentElement.classList.add('embutido');</script>
 </head>
 <body>
 <div class="faixa" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -51,8 +54,8 @@ Comece me pedindo o endereço da pasta do cliente, com os arquivos do projeto.</
   <section class="cartao">
     <span class="n">2</span>
     <h2>Passe o endereço da pasta do cliente</h2>
-    <p>O robô pede o caminho da pasta no computador (não use o Google Drive). A pasta tem:</p>
-    <ul><li>o diagnóstico (<code>diagnostico.json</code>);</li><li>o mapeamento baixado no fim da apresentação (<code>mapa-onboarding-*.json</code>);</li><li>a transcrição da reunião (txt, pdf ou docx);</li><li>a logo e, se houver, os vídeos e a pasta <code>convenios</code>.</li></ul>
+    <p>O robô pede o caminho da pasta no computador (não use o Google Drive). Qualquer formato serve: JSON, HTML, PDF, DOCX ou TXT, com qualquer nome. A pasta tem:</p>
+    <ul><li>o diagnóstico (o HTML ou o PDF baixado da análise, ou os dados em JSON);</li><li>o mapeamento da reunião (o PDF, o HTML ou o JSON baixado no fim da apresentação);</li><li>a transcrição da reunião do Gemini (PDF, DOCX ou TXT);</li><li>a logo e, se houver, os vídeos e a pasta <code>convenios</code>.</li></ul>
   </section>
   <section class="cartao">
     <span class="n">3</span>
