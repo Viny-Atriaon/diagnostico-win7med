@@ -943,6 +943,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if (!lista(d.perguntas_reuniao).length) a('Sem perguntas para a reunião de onboarding.');
     lista(d.pendencias).forEach(function (p) { a('Pendência do agente: ' + texto(p)); });
     if (d.lp_modelo && texto(d.lp_modelo.url) && !urlModelo(d)) a('Link do modelo de página fora do padrão (https://<site>/m/<12 letras ou números>/): ignorado.');
+    else if (!texto((d.lp_modelo || {}).url)) a('Sem o link da página modelo (lp_modelo.url): a apresentação do onboarding sai sem a landing page. Gere o modelo no Claude Code (cliente.mjs --publicar) e cole o bloco que ele devolve.');
     function longos(x, trilha) {
       if (typeof x === 'string' && x.length > 420) a('Texto longo em ' + trilha + ' (' + x.length + ' caracteres). Na reunião ninguém lê parede de texto: encurte.');
       else if (Array.isArray(x)) x.forEach(function (v2, i) { longos(v2, trilha + '[' + i + ']'); });
@@ -2379,7 +2380,8 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       st.el.querySelector('.dk-logo').src = logo(); st.el.querySelector('.dk-logo').alt = vocab().marca;
       st.el.hidden = false; document.documentElement.style.overflow = 'hidden';
       desenhar(false);
-      if (recuperou) toast('Respostas recuperadas deste aparelho. Para começar do zero, use "Apagar deste aparelho" no resumo.');
+      if (!M.urlModelo(diag)) toast('Este bloco não traz o link da página modelo: o passo da página principal sai sem a landing page.');
+      else if (recuperou) toast('Respostas recuperadas deste aparelho. Para começar do zero, use "Apagar deste aparelho" no resumo.');
     },
     fechar: fechar
   };
