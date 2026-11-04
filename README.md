@@ -233,7 +233,8 @@ O seu bloco alimenta a apresentação. Capriche nestes campos:
 | `presenca.google` (endereço, telefone, horário, nota) | Cartão do Google Meu Negócio nas regiões e dados para confirmar |
 | `lp_modelo.dominios` (opcional; no Claude Code o comando preenche e confere no Registro.br) | Domínios sugeridos na recomendação da página principal; na reunião, escolhe um ou combina a aprovação no grupo |
 | `lp_modelo.base` (opcional; no Claude Code o comando sorteia sem repetir o cliente anterior) | Fundo do banner do modelo: 1 Órbitas, 2 Ondas, 3 Varredura; na reunião, troca ao vivo no passo da página principal |
-| `lp_modelo.cores` (opcional; no Claude Code sai da logo do cliente) | `marca`, `marca_escura`, `destaque`, `apoio` em #rrggbb; sem logo colorida, a página fica com a paleta da Win7 |
+| `lp_modelo.cores` (opcional; no Claude Code sai da logo do cliente) | `marca`, `marca_escura`, `destaque`, `apoio` em #rrggbb; sem logo colorida, a página fica com a paleta da Win7. Use a identidade do **site** do cliente: a cor dos botões vira `marca` e `destaque`, e o fundo escuro do site (pode ser grafite ou preto) vira `marca_escura`, com contraste 7:1 sobre o branco |
+| `lp_modelo.fontes` (opcional; no Claude Code, `--fontes`) | `{ "titulo": "Bebas Neue", "texto": "Montserrat" }`: as fontes do site do cliente, lidas no código da página. Só fontes do Google Fonts da lista do Gerador; fora dela, a página fica com a Outfit |
 | `ouvimos.trunfos` | Lembretes na pergunta dos diferenciais |
 | `raio.zonas` e `raio.recomendacao_km` | Lista de cidades para marcar atuar ou não atuar |
 | `verba.frentes` | Sugestão de verba ao lado da pergunta 1 |
