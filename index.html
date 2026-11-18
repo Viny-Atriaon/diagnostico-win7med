@@ -68,6 +68,12 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
 .miniatura img { height: 44px; width: auto; max-width: 140px; object-fit: contain; border: 1px solid var(--linha); border-radius: 8px; background: #fff; padding: 4px; }
 .msg { font-size: 13px; margin-top: 8px; min-height: 18px; }
 .msg.erro { color: var(--critico); } .msg.ok { color: var(--bom); }
+/* start.win7.ai: salvar no sistema, com a pasta (ADR-008) */
+.salvar-sistema { display: grid; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--linha-forte); }
+.linha-salvar { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.linha-salvar label { flex: 1 1 200px; min-width: 0; }
+select { width: 100%; font: inherit; font-size: 14px; color: var(--tinta); background: #fbfdfe; border: 1px solid var(--linha-forte); border-radius: 10px; padding: 9px 11px; min-height: 40px; }
+select:focus-visible { outline: 3px solid var(--w7-amarelo); outline-offset: 2px; }
 
 /* resultado */
 .barra-res { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -546,6 +552,19 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
           <button type="button" id="limpar">Limpar</button>
         </div>
         <p class="msg" id="msg-dados" role="status"></p>
+        <div class="salvar-sistema" id="salvar-sistema" hidden>
+          <div class="linha-salvar">
+            <label for="pasta-sistema">Pasta no sistema
+              <select id="pasta-sistema"><option value="">Sem pasta</option></select>
+            </label>
+            <button type="button" id="nova-pasta-botao">Nova pasta</button>
+            <button type="button" class="primario" id="salvar-agora" disabled>Salvar no sistema</button>
+          </div>
+          <div class="linha-salvar" id="nova-pasta-form" hidden>
+            <label for="nova-pasta-nome">Nome da pasta<input type="text" id="nova-pasta-nome" maxlength="60" placeholder="ex.: Onboardings de novembro"></label>
+            <button type="button" id="nova-pasta-criar">Criar pasta</button>
+          </div>
+        </div>
         <p class="msg" id="msg-sistema" role="status" hidden></p>
       </div>
     </section>
@@ -2080,7 +2099,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if (/\.br$/.test(x) && x.split('.')[0].length > 26) return '';  // limite do Registro.br
     return /^[a-z0-9-]{2,40}(\.[a-z0-9-]{2,20}){1,3}$/.test(x) ? x : '';
   }
-  /** Sugestões a partir do serviço principal e da cidade (padrão das LPs Win7, como examedeimagemsorriso.com.br). Nome com até 26 caracteres (limite do Registro.br). */
+  /** Sugestões a partir do serviço principal e da cidade (padrão das LPs Win7, como examedeimagem<cidade>.com.br). Nome com até 26 caracteres (limite do Registro.br). */
   function sugerirDominios(diag, servico) {
     var c = (diag && diag.cliente) || {}, lm = (diag && diag.lp_modelo) || {};
     var sv = texto(servico || lm.servico || lista(c.servicos_foco)[0]);
@@ -2105,7 +2124,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   function ativacaoRobo3() {
     return [
       'A partir de agora você é o Robô 3 do Cérebro Win7 Med.',
-      'Ative o robô 3 do repositório ' + REPO_CEREBRO + '. Neste computador ele fica em Documents\\Claude\\cerebro-win7med (se não estiver, procure a pasta ou clone o repositório com o gh).',
+      'Ative o robô 3 do repositório ' + REPO_CEREBRO + '. Neste computador ele fica em Documents\\Claude\\cerebro-win7med (se não estiver, procure a pasta ou clone o repositório, que é público, com git clone).',
       'Leia AGENTS.md, ESTADO.md e .claude/skills/robo3/SKILL.md e siga o robô 3 à risca.',
       'Comece me pedindo o endereço da pasta do cliente, com os arquivos do projeto.'
     ].join('\n');
@@ -2373,17 +2392,19 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     rotuloSalvo('Salvando no sistema...', false);
     st.tSistema = setTimeout(despachar, imediato ? 0 : 1200);
   }
-  function despachar(urgente) {
+  function despachar(urgente, aoTerminar) {
     var sis = st.sistema; if (!sis) return;
     clearTimeout(st.tSistema); st.tSistema = null;
     if (st.enviando && !urgente) { st.denovo = true; return; }
     st.enviando = true; st.denovo = false;
     sis.salvarRespostas(JSON.parse(JSON.stringify(st.r)), urgente === true).then(function () {
       st.enviando = false; if (st.sistema !== sis) return;
+      if (aoTerminar) aoTerminar(true);
       if (st.denovo) { despachar(); return; }
       rotuloSalvo('Salvo no sistema às ' + hora(), false);
     }, function (e) {
       st.enviando = false; if (st.sistema !== sis) return;
+      if (aoTerminar) aoTerminar(false);
       var definitivo = e && (e.status === 400 || e.status === 404 || e.status === 413);
       rotuloSalvo(definitivo ? 'Não salvou no sistema: exporte o rascunho' : 'Sem conexão com o sistema: tentando de novo', true);
       if (!definitivo) st.tSistema = setTimeout(despachar, 8000);
@@ -2737,6 +2758,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     el.className = 'dk'; el.id = 'dk'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', 'Apresentação do onboarding'); el.hidden = true;
     el.innerHTML = '<div class="dk-faixa" aria-hidden="true"><span class="a"></span><span class="v"></span><span class="g"></span><span class="b"></span></div>' +
       '<header class="dk-topo"><img class="dk-logo" alt=""><div class="dk-cli"><b></b><span></span></div><div class="dk-prog" aria-hidden="true"></div><div class="dk-acoes"><span class="dk-salvo" aria-live="polite"></span>' +
+      '<button type="button" class="dk-btn" data-acao="salvar-agora" hidden title="Salva as respostas no sistema agora (elas também salvam sozinhas a cada mudança)">Salvar</button>' +
       '<button type="button" class="dk-btn" data-acao="roteiro">Roteiro</button><button type="button" class="dk-btn" data-acao="notas" aria-pressed="false" title="Notas de quem conduz (tecla N)">Notas</button><button type="button" class="dk-btn" data-acao="sair">Sair</button></div></header>' +
       faixaPulso() +
       '<main class="dk-palco"><div class="dk-slide" tabindex="-1"></div></main>' +
@@ -2841,6 +2863,12 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     else if (acao === 'notas') { st.notas = !st.notas; a.setAttribute('aria-pressed', String(st.notas)); st.el.querySelector('.dk-notas').hidden = !st.notas; }
     else if (acao === 'roteiro') { st.gaveta = !st.gaveta; st.el.querySelector('.dk-gaveta').hidden = !st.gaveta; }
     else if (acao === 'sair') fechar();
+    else if (acao === 'salvar-agora' && st.sistema) {
+      if (st.timer) { clearTimeout(st.timer); st.timer = null; }
+      st.r.atualizado_em = new Date().toISOString();
+      try { localStorage.setItem(st.chave, JSON.stringify({ diagnostico: st.diag, respostas: st.r })); } catch (er) { /* fica a do sistema */ }
+      despachar(true, function (ok) { toast(ok ? 'Respostas salvas no sistema. Ficam no projeto, na aba Projetos do start.' : 'Não salvou agora: o sistema tenta de novo sozinho.'); });
+    }
     else if (acao === 'add-servico') { var inp = st.el.querySelector('#dk-novo-servico'); var n = inp.value.trim(); if (n) { st.r.servicos.push({ nome: n, sugerido: false, confirmado: true, ordem: st.r.servicos.length }); salvar(); desenhar(true); } }
     else if (acao === 'add-cidade') { var nc = st.el.querySelector('#dk-nova-cidade').value.trim(); var km = num(st.el.querySelector('#dk-nova-km').value); if (nc) { st.r.cidades.push({ nome: nc, uf: '', km: km, zona: 0, atuar: true, adicionada: true }); salvar(); desenhar(true); } }
     else if (acao === 'gerar-mapa') gerarMapa();
@@ -2981,6 +3009,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       st.el.hidden = false; document.documentElement.style.overflow = 'hidden';
       desenhar(false);
       rotuloSalvo(st.sistema && doSistema ? 'Salvo no sistema' : '', false);
+      st.el.querySelector('[data-acao="salvar-agora"]').hidden = !st.sistema;
       if (st.sistema && escolhida && escolhida === local) enviarAoSistema(true);
       if (!M.urlModelo(diag)) {
         // sem link publicado: o modelo é montado aqui, com a logo e as cores do cliente
@@ -3003,7 +3032,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   'use strict';
   var M = window.MotorDiagnostico, W7 = window.W7;
   var $ = function (id) { return document.getElementById(id); };
-  var estado = { logoCliente: W7.logoCliente || '', html: '', nomeArquivo: '', dados: null, projeto: null };
+  var estado = { logoCliente: W7.logoCliente || '', html: '', nomeArquivo: '', dados: null, projeto: null, versaoDe: '' };
 
   function msg(id, texto, tipo) { var el = $(id); el.textContent = texto; el.className = 'msg' + (tipo ? ' ' + tipo : ''); }
   function hora(iso) { var d = iso ? new Date(iso) : new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
@@ -3024,18 +3053,47 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
       }, function () { throw new Error('Sem conexão com o sistema.'); });
     }
     function situacao(texto, tipo) { var el = $('msg-sistema'); el.hidden = false; msg('msg-sistema', texto, tipo); }
+    function exemplo() { return /EXEMPLO FICT[ÍI]CIO/i.test(String(((estado.dados || {}).meta || {}).aviso || '')); }
+    var pastas = [];
+    function nomePasta(id) { for (var i = 0; i < pastas.length; i++) if (pastas[i].id === id) return pastas[i].nome; return ''; }
+    function desenharPastas(escolhida) {
+      var sel = $('pasta-sistema'), atual = escolhida !== undefined ? escolhida : sel.value;
+      sel.innerHTML = '<option value="">Sem pasta</option>' + pastas.map(function (p) { return '<option value="' + M.esc(p.id) + '">' + M.esc(p.nome) + '</option>'; }).join('');
+      sel.value = nomePasta(atual) ? atual : '';
+    }
+    function carregarPastas(escolhida) {
+      return api('GET', 'pastas').then(function (r) { pastas = r.pastas || []; desenharPastas(escolhida); }, function () { /* sem a lista, salva sem pasta */ });
+    }
     return {
-      api: api, situacao: situacao,
-      salvarDiagnostico: function () {
+      api: api, situacao: situacao, carregarPastas: carregarPastas, nomePasta: nomePasta,
+      criarPasta: function (nome) {
+        return api('POST', 'pastas', { nome: nome }).then(function (p) { return carregarPastas(p.id).then(function () { return p; }); });
+      },
+      /** Salvar: o Gerar já salva sozinho; o botão salva de novo na hora, com a pasta escolhida (e volta para uma versão aberta). */
+      salvarDiagnostico: function (comPasta) {
         if (!estado.dados) return Promise.resolve();
-        if (/EXEMPLO FICT[ÍI]CIO/i.test(String((estado.dados.meta || {}).aviso || ''))) { situacao('Exemplo fictício: não é salvo no sistema.', ''); return Promise.resolve(); }
+        if (exemplo()) { situacao('Exemplo fictício: não é salvo no sistema. Cole o bloco do cliente e clique em Gerar.', ''); return Promise.resolve(); }
         situacao('Salvando no sistema...', '');
-        return (estado.salvando = api('POST', 'projetos', { id: estado.projeto ? estado.projeto.id : '', diagnostico: estado.dados, logo: estado.logoCliente || '' }).then(function (r) {
+        var corpo = { id: estado.projeto ? estado.projeto.id : '', diagnostico: estado.dados, logo: estado.logoCliente || '' };
+        if (comPasta || !estado.projeto) corpo.pasta = $('pasta-sistema').value;
+        if (estado.versaoDe) corpo.versao_de = estado.versaoDe;
+        return (estado.salvando = api('POST', 'projetos', corpo).then(function (r) {
           if (!estado.projeto || estado.projeto.id !== r.id) estado.projeto = { id: r.id, onboarding: null };
+          var voltou = !!estado.versaoDe; estado.versaoDe = '';
+          desenharPastas(r.pasta || '');
           try { history.replaceState(null, '', location.pathname + '?projeto=' + r.id + location.hash); } catch (e) { /* endereço fica como está */ }
           try { window.parent.postMessage({ tipo: 'w7-projeto', id: r.id }, location.origin); } catch (e) { /* fora do start */ }
-          situacao((r.novo ? 'Projeto criado' : 'Projeto salvo') + ' no sistema às ' + hora() + '. Ele fica na aba Projetos do start.', 'ok');
-        }, function (e) { situacao('Não salvou no sistema: ' + e.message + ' Clique em Gerar de novo antes de sair.', 'erro'); })).then(function () { estado.salvando = null; });
+          var onde = r.pasta ? ' na pasta ' + nomePasta(r.pasta) : '';
+          situacao((voltou ? 'O projeto voltou para esta versão' : r.novo ? 'Projeto criado' : 'Projeto salvo') + ' no sistema' + onde + ' às ' + hora() + '. Fica na aba Projetos do start, com o histórico.', 'ok');
+        }, function (e) { situacao('Não salvou no sistema: ' + e.message + ' Clique em Salvar no sistema antes de sair.', 'erro'); })).then(function () { estado.salvando = null; });
+      },
+      moverParaPasta: function () {
+        if (!estado.projeto) return;
+        var id = $('pasta-sistema').value;
+        api('PUT', 'projetos/' + estado.projeto.id + '/pasta', { pasta: id }).then(function () {
+          situacao(id ? 'Projeto guardado na pasta ' + nomePasta(id) + '.' : 'Projeto tirado da pasta.', 'ok');
+          try { window.parent.postMessage({ tipo: 'w7-projeto', id: estado.projeto.id }, location.origin); } catch (e) { /* fora do start */ }
+        }, function (e) { situacao('Não mudou a pasta: ' + e.message, 'erro'); });
       },
       /** Opções da apresentação: cada resposta e o mapeamento vão para o projeto no sistema. */
       opcoesDeck: function (respostasServidor) {
@@ -3085,7 +3143,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     if (!r.html) {
       $('res-placar').textContent = '0'; $('res-placar').className = 'v critico'; $('res-classe').textContent = 'diagnóstico não gerado';
       ['apresentar', 'baixar', 'nova-aba', 'imprimir'].forEach(function (id) { $(id).disabled = true; });
-      $('previa').srcdoc = ''; estado.dados = null;
+      $('previa').srcdoc = ''; estado.dados = null; if (sistema) $('salvar-agora').disabled = true;
       msg('msg-dados', 'O diagnóstico não foi gerado: corrija os itens em vermelho ou peça ao agente para reenviar o bloco.', 'erro');
       return;
     }
@@ -3097,6 +3155,7 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
     ['apresentar', 'baixar', 'nova-aba', 'imprimir'].forEach(function (id) { $(id).disabled = !!r.validacao.erros.length; });
     $('previa').srcdoc = r.html;
     msg('msg-dados', r.validacao.erros.length ? 'Diagnóstico gerado com pendências em vermelho: corrija antes de usar.' : 'Diagnóstico gerado. Na reunião, clique em Apresentar no onboarding.', r.validacao.erros.length ? 'erro' : 'ok');
+    if (sistema) $('salvar-agora').disabled = false;
     try { sessionStorage.setItem('w7-rascunho', bruto); } catch (e) { /* sem rascunho, sem problema */ }
     if (sistema && salvar === true) sistema.salvarDiagnostico();
   }
@@ -3169,14 +3228,36 @@ label { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(-
   if (sistema && /[?&]novo=1/.test(location.search)) rascunho = null;  // Novo projeto, no start: começa do exemplo
   // no start, ?projeto=<id> abre um projeto salvo (aba Projetos): diagnóstico, logo e, ao apresentar, as respostas da reunião
   var idProjeto = sistema ? (/[?&]projeto=([a-f0-9]{16})(?![a-f0-9])/.exec(location.search) || [])[1] : null;
+  var nVersao = sistema ? (/[?&]versao=(\d{1,2})(?!\d)/.exec(location.search) || [])[1] : null;
+  if (sistema) {
+    $('salvar-sistema').hidden = false;
+    if (!idProjeto) sistema.carregarPastas('');
+    $('salvar-agora').addEventListener('click', function () { if (estado.dados) sistema.salvarDiagnostico(true); });
+    $('pasta-sistema').addEventListener('change', function () { if (estado.projeto) sistema.moverParaPasta(); });
+    $('nova-pasta-botao').addEventListener('click', function () { $('nova-pasta-form').hidden = !$('nova-pasta-form').hidden; if (!$('nova-pasta-form').hidden) $('nova-pasta-nome').focus(); });
+    var criar = function () {
+      var nome = $('nova-pasta-nome').value.trim(); if (!nome) { $('nova-pasta-nome').focus(); return; }
+      sistema.criarPasta(nome).then(function () {
+        $('nova-pasta-nome').value = ''; $('nova-pasta-form').hidden = true;
+        if (estado.projeto) sistema.moverParaPasta(); else sistema.situacao('Pasta ' + nome + ' criada. Clique em Salvar no sistema para guardar o projeto nela.', 'ok');
+      }, function (e) { sistema.situacao('Não criou a pasta: ' + e.message, 'erro'); });
+    };
+    $('nova-pasta-criar').addEventListener('click', criar);
+    $('nova-pasta-nome').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); criar(); } });
+  }
   if (idProjeto) {
     $('dados').value = ''; sistema.situacao('Abrindo o projeto salvo...', '');
-    sistema.api('GET', 'projetos/' + idProjeto).then(function (p) {
+    sistema.api('GET', 'projetos/' + idProjeto + (nVersao !== undefined && nVersao !== null ? '?versoes=1' : '')).then(function (p) {
       estado.projeto = { id: p.id }; estado.logoCliente = p.logo || '';
+      sistema.carregarPastas(p.pasta || '');
+      // "Abrir esta versão" (Histórico, na aba Projetos): mostra a versão antiga; Salvar no sistema volta o projeto para ela
+      var versao = nVersao !== undefined && nVersao !== null ? (p.versoes || [])[+nVersao] : null;
+      if (versao && versao.diagnostico) { p.diagnostico = versao.diagnostico; estado.versaoDe = versao.quando || ''; }
       if (estado.logoCliente) { $('mini-logo').hidden = false; $('remover-logo').hidden = false; $('mini-logo').querySelector('img').src = estado.logoCliente; $('mini-logo').querySelector('span').textContent = 'logo salva no projeto'; }
       $('dados').value = JSON.stringify(p.diagnostico, null, 2);
       gerar();
-      sistema.situacao('Projeto salvo no sistema: atualizado por ' + (p.atualizado_por || 'alguém da equipe') + ' em ' + dia(p.atualizado_em) + '.', 'ok');
+      if (versao) sistema.situacao('Você está vendo a versão de ' + dia(versao.quando) + (versao.quem ? ', salva por ' + versao.quem : '') + '. Para o projeto voltar para ela, clique em Salvar no sistema. A versão atual fica guardada.', '');
+      else sistema.situacao('Projeto salvo no sistema: feito por ' + (p.criado_por || 'alguém da equipe') + ', atualizado por ' + (p.atualizado_por || 'alguém da equipe') + ' em ' + dia(p.atualizado_em) + (p.pasta ? '. Pasta: ' + sistema.nomePasta(p.pasta) : '') + '.', 'ok');
     }, function (e) {
       sistema.situacao('Não consegui abrir o projeto: ' + e.message, 'erro');
       $('dados').value = JSON.stringify(W7.exemplo, null, 2); gerar();

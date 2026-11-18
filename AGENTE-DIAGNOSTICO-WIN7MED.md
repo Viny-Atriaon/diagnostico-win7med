@@ -197,7 +197,7 @@ Uma **frente** por serviço (máximo 3), na ordem de prioridade. Dentro de cada 
 Regras:
 - De 2 a 4 termos por grupo; de 8 a 16 por frente.
 - Correspondência **só `exata` e `frase`**. **Nunca ampla.** Use exata nos termos de maior intenção (serviço + cidade, preço, convênio que mais traz pacientes) e frase nas variações.
-- Escreva como o cliente final digita: minúsculas, com acento, sem pontuação, até 10 palavras. Se o nome da cidade confunde com outra coisa (ex.: "Sorriso"), acrescente a UF ("sorriso mt").
+- Escreva como o cliente final digita: minúsculas, com acento, sem pontuação, até 10 palavras. Se o nome da cidade confunde com outra coisa (ex.: "Bonito"), acrescente a UF ("bonito ms").
 - Prioridade: `alta` (serviço + cidade, preço, convênio principal), `media` ou `baixa`. Em saúde, convênio principal desconhecido: todos os convênios em frase e média, e a pergunta vai para `perguntas_reuniao`.
 - Só convênios ou parcerias que a empresa realmente tem.
 - Não informe volume de busca nem custo por clique: isso é confirmado no Planejador de Palavras-chave na implantação. Nomes de campanha e palavras negativas ficam com o gestor de anúncios.
